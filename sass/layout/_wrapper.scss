@@ -1,0 +1,16 @@
+.wrapper {
+    width: 40vw;
+    height: 80vh;
+    background-color: red;
+    margin-top: 5rem;
+
+    @include respond(tab-land) {
+        width: 55vw;
+    }
+    @include respond(tab-port) {
+        width: 65vw;
+    }
+    @include respond(phone) {
+        width: 85vw;
+    }
+}

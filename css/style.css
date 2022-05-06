@@ -1,13 +1,13 @@
 .theme-1 {
-  --color-1: hsl(0, 0%, 98%);
-  --color-2: hsl(236, 33%, 92%);
+  --color-background: hsl(236, 33%, 92%);
+  --color-card: hsl(0, 0%, 98%);
   --color-3: hsl(233, 11%, 84%);
   --color-4: hsl(236, 9%, 61%);
   --color-5: hsl(235, 19%, 35%); }
 
 .theme-2 {
-  --color-1: hsl(235, 21%, 11%);
-  --color-2: hsl hsl(235, 24%, 19%);
+  --color-background: hsl(235, 21%, 11%);
+  --color-card: hsl hsl(235, 24%, 19%);
   --color-3: hsl(234, 39%, 85%);
   --color-4: hsl(236, 33%, 92%);
   --color-5: hsl(234, 11%, 52%);
@@ -91,3 +91,28 @@ body {
   font-size: 1.13rem;
   line-height: 1.5rem;
   font-weight: 400; }
+
+.container {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-background);
+  background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-desktop-light_seds72.jpg);
+  background-repeat: no-repeat;
+  background-size: contain; }
+
+.wrapper {
+  width: 40vw;
+  height: 80vh;
+  background-color: red;
+  margin-top: 5rem; }
+  @media only screen and (max-width: 75em) {
+    .wrapper {
+      width: 55vw; } }
+  @media only screen and (max-width: 56.25em) {
+    .wrapper {
+      width: 65vw; } }
+  @media only screen and (max-width: 37.5em) {
+    .wrapper {
+      width: 85vw; } }
