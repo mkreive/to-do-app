@@ -17,6 +17,7 @@
     },
     "homepage": "https://github.com/mkreive/toDoApp#readme",
     "devDependencies": {
-        "node-sass": "^7.0.1"
+        "node-sass": "^7.0.1",
+        "parcel": "^2.5.0"
     }
 }

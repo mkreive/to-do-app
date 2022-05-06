@@ -1,0 +1,93 @@
+.theme-1 {
+  --color-1: hsl(0, 0%, 98%);
+  --color-2: hsl(236, 33%, 92%);
+  --color-3: hsl(233, 11%, 84%);
+  --color-4: hsl(236, 9%, 61%);
+  --color-5: hsl(235, 19%, 35%); }
+
+.theme-2 {
+  --color-1: hsl(235, 21%, 11%);
+  --color-2: hsl hsl(235, 24%, 19%);
+  --color-3: hsl(234, 39%, 85%);
+  --color-4: hsl(236, 33%, 92%);
+  --color-5: hsl(234, 11%, 52%);
+  --color-6: hsl(233, 14%, 35%);
+  --color-7: hsl(237, 14%, 26%); }
+
+/*
+0 - 600px:      Phone
+600 - 900px:    Tablet portrait
+900 - 1200px:   Tablet landscape
+[1200 - 1800] is where our normal styles apply
+1800px + :      Big desktop
+
+$breakpoint arguement choices:
+- phone
+- tab-port
+- tab-land
+- big-desktop
+
+
+1em = 16px
+*/
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html,
+body {
+  height: 100%; }
+
+html {
+  font-size: 62.5%; }
+  @media only screen and (min-width: 112.5em) {
+    html {
+      font-size: 75%; } }
+  @media only screen and (max-width: 75em) {
+    html {
+      font-size: 56.25%; } }
+  @media only screen and (max-width: 56.25em) {
+    html {
+      font-size: 50%; } }
+  @media only screen and (max-width: 37.5em) {
+    html {
+      font-size: 40%; } }
+
+body {
+  box-sizing: border-box; }
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%; }
+
+input,
+button,
+textarea,
+select {
+  font: inherit; }
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word; }
+
+#root,
+#__next {
+  isolation: isolate; }
+
+body {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 1.13rem;
+  line-height: 1.5rem;
+  font-weight: 400; }
