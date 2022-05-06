@@ -1,0 +1,15 @@
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    &__logo {
+        color: var(--color-card-logo);
+        text-transform: uppercase;
+        font-weight: $font-weight-heavy;
+    }
+    &__theme {
+        width: auto;
+        color: red;
+    }
+}

@@ -3,6 +3,8 @@
     height: 80vh;
     background-color: red;
     margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
 
     @include respond(tab-land) {
         width: 55vw;
