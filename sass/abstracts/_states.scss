@@ -10,3 +10,8 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.crossed {
+    color: var(--color-borders) !important;
+    text-decoration-line: line-through;
+}

@@ -41,6 +41,10 @@ $breakpoint arguement choices:
   background-repeat: no-repeat;
   background-position: center; }
 
+.crossed {
+  color: var(--color-borders) !important;
+  text-decoration-line: line-through; }
+
 *,
 *::after,
 *::before {
@@ -178,7 +182,11 @@ body {
   background-repeat: no-repeat;
   width: 3rem;
   height: 3rem;
-  align-self: flex-end; }
+  background-position: center;
+  position: relative;
+  right: -65%; }
+  .exit:hover {
+    cursor: pointer; }
 
 .text {
   font-size: 2rem;
