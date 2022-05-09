@@ -4,8 +4,7 @@
     width: 3rem;
     height: 3rem;
     background-position: center;
-    position: relative;
-    right: -65%;
+    align-self: flex-end;
 
     &:hover {
         cursor: pointer;

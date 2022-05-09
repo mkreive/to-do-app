@@ -18,5 +18,14 @@
         &:not(:last-child) {
             border-bottom: 1px solid var(--color-borders);
         }
+
+        &:last-child {
+            border-bottom-left-radius: 0.7rem;
+            border-bottom-right-radius: 0.7rem;
+        }
+        &:nth-child(2) {
+            border-top-left-radius: 0.7rem;
+            border-top-right-radius: 0.7rem;
+        }
     }
 }

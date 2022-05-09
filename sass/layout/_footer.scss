@@ -1,0 +1,15 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: $font-size-footer;
+    color: var(--color-footer);
+
+    &__text {
+        margin-right: 1rem;
+
+        &:hover {
+            cursor: pointer;
+            color: var(--color-text);
+        }
+    }
+}

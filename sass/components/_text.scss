@@ -2,8 +2,15 @@
     font-size: $font-size-text;
     color: var(--color-text);
     font-weight: $font-weight-light;
+    flex: 1;
 
     &:hover {
         cursor: pointer;
+    }
+
+    &__input {
+        border: none;
+        outline: none;
+        background-color: var(--color-card-logo);
     }
 }

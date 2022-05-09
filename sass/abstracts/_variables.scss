@@ -1,9 +1,11 @@
 // FONT
-$font-size-main: 1.13rem; // 18px
-$font-line-height: 1.8rem;
+$font-size-main: 1.3rem; // 18px
 $font-size-text: 2rem;
-$font-letter-spacing-big: 1.8rem;
 $font-size-logo: 5rem;
+$font-size-footer: 1.4rem;
+
+$font-line-height: 1.8rem;
+$font-letter-spacing-big: 1.8rem;
 
 $font-weight-light: 400;
 $font-weight-heavy: 700;
@@ -23,7 +25,7 @@ $gradient-background: linear-gradient(
     --color-card-logo: hsl(0, 0%, 98%);
     --color-borders: hsl(233, 11%, 84%);
     --color-text: hsl(235, 19%, 35%);
-    --color-4: hsl(236, 9%, 61%);
+    --color-footer: hsl(236, 9%, 61%);
 }
 
 .theme-2 {

@@ -15,3 +15,8 @@
     color: var(--color-borders) !important;
     text-decoration-line: line-through;
 }
+
+.active {
+    font-weight: $font-weight-heavy;
+    color: $color-primary-dark-blue;
+}

@@ -3,7 +3,7 @@
   --color-card-logo: hsl(0, 0%, 98%);
   --color-borders: hsl(233, 11%, 84%);
   --color-text: hsl(235, 19%, 35%);
-  --color-4: hsl(236, 9%, 61%); }
+  --color-footer: hsl(236, 9%, 61%); }
 
 .theme-2 {
   --color-background: hsl(235, 21%, 11%);
@@ -44,6 +44,10 @@ $breakpoint arguement choices:
 .crossed {
   color: var(--color-borders) !important;
   text-decoration-line: line-through; }
+
+.active {
+  font-weight: 700;
+  color: #3a7bfd; }
 
 *,
 *::after,
@@ -103,7 +107,7 @@ h6 {
 
 body {
   font-family: "Josefin Sans", sans-serif;
-  font-size: 1.13rem;
+  font-size: 1.3rem;
   line-height: 1.8rem;
   font-weight: 400; }
 
@@ -152,6 +156,23 @@ body {
     .header__theme:hover {
       cursor: pointer; }
 
+.footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.4rem;
+  color: var(--color-footer); }
+  .footer__text {
+    margin-right: 1rem; }
+    .footer__text:hover {
+      cursor: pointer;
+      color: var(--color-text); }
+
+.bottom {
+  align-self: center;
+  color: var(--color-footer);
+  font-size: 1.4rem;
+  margin-top: 5rem; }
+
 .card {
   display: flex;
   flex-direction: column;
@@ -167,6 +188,12 @@ body {
       border: none; }
     .card__item:not(:last-child) {
       border-bottom: 1px solid var(--color-borders); }
+    .card__item:last-child {
+      border-bottom-left-radius: 0.7rem;
+      border-bottom-right-radius: 0.7rem; }
+    .card__item:nth-child(2) {
+      border-top-left-radius: 0.7rem;
+      border-top-right-radius: 0.7rem; }
 
 .checkmark {
   width: 3rem;
@@ -183,14 +210,18 @@ body {
   width: 3rem;
   height: 3rem;
   background-position: center;
-  position: relative;
-  right: -65%; }
+  align-self: flex-end; }
   .exit:hover {
     cursor: pointer; }
 
 .text {
   font-size: 2rem;
   color: var(--color-text);
-  font-weight: 400; }
+  font-weight: 400;
+  flex: 1; }
   .text:hover {
     cursor: pointer; }
+  .text__input {
+    border: none;
+    outline: none;
+    background-color: var(--color-card-logo); }
