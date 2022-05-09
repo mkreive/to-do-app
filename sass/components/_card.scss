@@ -1,0 +1,23 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    &__item {
+        height: 8vh;
+        background-color: var(--color-card-logo);
+        font-size: $font-size-text;
+        color: var(--color-text);
+        font-weight: $font-weight-light;
+
+        &:first-child {
+            margin-bottom: $margin-bottom-big;
+            border-radius: 0.7rem;
+            border: none;
+        }
+
+        &:not(:last-child) {
+            border-bottom: 1px solid var(--color-borders);
+        }
+    }
+}
