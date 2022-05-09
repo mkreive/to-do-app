@@ -12,7 +12,11 @@ $margin-bottom-big: 4rem;
 $margin-bottom-small: 1rem;
 
 $color-primary-dark-blue: hsl(220, 98%, 61%);
-$gradient-background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+$gradient-background: linear-gradient(
+    157deg,
+    rgba(87, 221, 255, 1) 0%,
+    rgba(192, 88, 243, 1) 88%
+);
 
 .theme-1 {
     --color-background: hsl(236, 33%, 92%);

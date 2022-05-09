@@ -1,0 +1,12 @@
+.checked {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    margin-right: 2.5rem;
+    background: rgb(87, 221, 255);
+    background-image: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-check_ub1f7p.svg");
+    background-image: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-check_ub1f7p.svg"),
+        $gradient-background;
+    background-repeat: no-repeat;
+    background-position: center;
+}

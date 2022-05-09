@@ -1,0 +1,9 @@
+.text {
+    font-size: $font-size-text;
+    color: var(--color-text);
+    font-weight: $font-weight-light;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
