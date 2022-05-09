@@ -4,7 +4,12 @@
     width: 100vw;
     height: 100vh;
     background-color: var(--color-background);
-    background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-desktop-light_seds72.jpg);
+    background-image: var(--background-image-desktop);
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: 100vw 40vh;
+
+    @include respond(phone) {
+        background-image: var(--background-image-mobile);
+        background-size: 100vw 37vh;
+    }
 }

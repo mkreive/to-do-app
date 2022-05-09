@@ -1,18 +1,23 @@
 .theme-1 {
   --color-background: hsl(236, 33%, 92%);
-  --color-card-logo: hsl(0, 0%, 98%);
+  --color-card: hsl(0, 0%, 98%);
+  --color-logo: hsl(0, 0%, 98%);
   --color-borders: hsl(233, 11%, 84%);
   --color-text: hsl(235, 19%, 35%);
-  --color-footer: hsl(236, 9%, 61%); }
+  --color-footer: hsl(236, 9%, 61%);
+  --background-image-desktop: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-desktop-light_seds72.jpg");
+  --background-image-mobile: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-mobile-light_xd1knv.jpg"); }
 
 .theme-2 {
   --color-background: hsl(235, 21%, 11%);
-  --color-card-logo: hsl(235, 24%, 19%);
+  --color-card: hsl(235, 24%, 19%);
+  --color-logo: hsl(236, 33%, 92%);
   --color-borders: hsl(233, 14%, 35%);
   --color-text: hsl(234, 39%, 85%);
-  --color-4: hsl(236, 33%, 92%);
-  --color-5: hsl(234, 11%, 52%);
-  --color-7: hsl(237, 14%, 26%); }
+  --color-footer: hsl(234, 11%, 52%);
+  --color-7: hsl(237, 14%, 26%);
+  --background-image-desktop: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-desktop-dark_jv48fe.jpg");
+  --background-image-mobile: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-mobile-dark_kgbv7h.jpg"); }
 
 /*
 0 - 600px:      Phone
@@ -117,9 +122,13 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: var(--color-background);
-  background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-desktop-light_seds72.jpg);
+  background-image: var(--background-image-desktop);
   background-repeat: no-repeat;
-  background-size: contain; }
+  background-size: 100vw 40vh; }
+  @media only screen and (max-width: 37.5em) {
+    .container {
+      background-image: var(--background-image-mobile);
+      background-size: 100vw 37vh; } }
 
 .wrapper {
   width: 40vw;
@@ -138,12 +147,13 @@ body {
 
 .header {
   width: 100%;
+  height: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4rem; }
+  margin-bottom: 3rem; }
   .header__logo {
-    color: var(--color-card-logo);
+    color: var(--color-logo);
     text-transform: uppercase;
     font-weight: 700;
     font-size: 5rem;
@@ -151,8 +161,9 @@ body {
   .header__theme {
     background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-moon_j88jkv.svg);
     background-repeat: no-repeat;
-    width: 3rem;
-    height: 3rem; }
+    background-position: center;
+    width: 5rem;
+    height: 5rem; }
     .header__theme:hover {
       cursor: pointer; }
 
@@ -171,7 +182,7 @@ body {
   align-self: center;
   color: var(--color-footer);
   font-size: 1.4rem;
-  margin-top: 5rem; }
+  margin-top: 3rem; }
 
 .card {
   display: flex;
@@ -179,11 +190,11 @@ body {
   width: 100%; }
   .card__item {
     display: flex;
-    background-color: var(--color-card-logo);
+    background-color: var(--color-card);
     align-items: center;
     padding: 2.5rem; }
     .card__item:first-child {
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
       border-radius: 0.7rem;
       border: none; }
     .card__item:not(:last-child) {
@@ -194,6 +205,10 @@ body {
     .card__item:nth-child(2) {
       border-top-left-radius: 0.7rem;
       border-top-right-radius: 0.7rem; }
+    .card__item:hover {
+      background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-cross_a9tvlw.svg);
+      background-repeat: no-repeat;
+      background-position: 95%; }
 
 .checkmark {
   width: 3rem;
@@ -202,16 +217,6 @@ body {
   border: 1px solid var(--color-borders);
   margin-right: 2.5rem; }
   .checkmark:hover {
-    cursor: pointer; }
-
-.exit {
-  background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-cross_a9tvlw.svg);
-  background-repeat: no-repeat;
-  width: 3rem;
-  height: 3rem;
-  background-position: center;
-  align-self: flex-end; }
-  .exit:hover {
     cursor: pointer; }
 
 .text {
