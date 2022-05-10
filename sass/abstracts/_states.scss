@@ -20,3 +20,13 @@
     font-weight: $font-weight-heavy;
     color: $color-primary-dark-blue;
 }
+
+.dragging {
+    transform: translateY(10%);
+    transition: all 10ms ease-in-out;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}

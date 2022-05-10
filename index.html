@@ -25,11 +25,12 @@
         <title>Frontend Mentor | Todo app</title>
     </head>
     <body>
-        <main class="theme-1">
+        <main class="theme-1  ">
             <div class="container">
                 <div class="wrapper">
                     <div class="header">
                         <div class="header__logo">Todo</div>
+                        <div class="header__login"></div>
                         <div class="header__theme"></div>
                     </div>
                     
@@ -79,6 +80,47 @@
                     <div class="bottom">
                       Drag and drop to reorder list
                     </div>
+
+                    <div class="overlay hidden"></div>
+
+                    <dialog class="login">
+                      <h1>Please login:</h1>
+                      <form action="/form.php" class="form" name="submitForm" method="post">
+                
+                        <div class="form-field">
+                            <input
+                                class="input__success"
+                                type="text"
+                                placeholder="Name"
+                                name="name"
+                                id="name"
+                            />
+                        </div>
+
+                        <div class="form-field">
+                            <input
+                                class="input__success"
+                                id="password"
+                                type="password"
+                                placeholder="Password"
+                                name="psw"
+                            />
+                        </div>
+
+                        <div class="login__terms">
+                            By clicking the button you are agreeing to our
+                            <a
+                                href="https://unsplash.com/photos/TtJ0CLjLi6w"
+                                class="login__link"
+                                >Terms and Services</a
+                            >
+                        </div>
+
+                        <button class=" btn btn__signup">SignUp</button>
+                        <button class=" btn btn__login">Login</button>
+                        <button class=" btn btn__cancel">Login</button>
+                      </form>
+                  </dialog>
                 </div>
             </div>
         </main>

@@ -54,6 +54,14 @@ $breakpoint arguement choices:
   font-weight: 700;
   color: #3a7bfd; }
 
+.dragging {
+  transform: translateY(10%);
+  transition: all 10ms ease-in-out; }
+
+.hidden {
+  visibility: hidden;
+  opacity: 0; }
+
 *,
 *::after,
 *::before {
@@ -157,7 +165,8 @@ body {
     text-transform: uppercase;
     font-weight: 700;
     font-size: 5rem;
-    letter-spacing: 1.8rem; }
+    letter-spacing: 1.8rem;
+    flex: 1; }
   .header__theme {
     background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-moon_j88jkv.svg);
     background-repeat: no-repeat;
@@ -165,6 +174,14 @@ body {
     width: 5rem;
     height: 5rem; }
     .header__theme:hover {
+      cursor: pointer; }
+  .header__login {
+    background-image: url("https://res.cloudinary.com/kreiva/image/upload/v1652166389/FrontendMentor/ToDoListApp/faciukas2_ioa2qu.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 5rem;
+    height: 5rem; }
+    .header__login:hover {
       cursor: pointer; }
 
 .footer {
@@ -232,3 +249,50 @@ body {
     border: none;
     outline: none;
     background-color: var(--color-card-logo); }
+
+.btn {
+  width: 100%;
+  background-color: red;
+  box-shadow: 0px 4px #30b57c;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 160%;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer; }
+  .btn__signup {
+    background-color: green; }
+  .btn__login {
+    background-color: violet; }
+  .btn__cancel {
+    background-color: pink; }
+
+.login {
+  width: 100%;
+  background-color: white;
+  box-shadow: 0px 8px rgba(0, 0, 0, 0.171);
+  border-radius: 0.5rem;
+  padding: 3rem; }
+  .login__terms {
+    text-align: center;
+    color: red;
+    font-weight: 500; }
+  .login__link {
+    color: red;
+    font-weight: 700;
+    text-decoration: none; }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  transition: all 0.5s; }
