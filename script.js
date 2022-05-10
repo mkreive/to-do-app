@@ -61,6 +61,14 @@ const openModal = function () {
     loginOverlay.showModal();
     overlay.classList.remove("hidden");
 };
+const generateItemHtml = function (value, classes) {
+    return `
+    <div class="card__item">
+        <span class="checkmark"></span>
+        <div class="text ${classes}">${value}</div>
+        <div class="exit"></div>
+    </div>`;
+};
 
 // EVENT LISTENERS
 // open/close login modal
@@ -83,24 +91,23 @@ themeSwitchBtn.addEventListener("click", function () {
 });
 
 // display list
-const displayList = function (user, sort = false) {
+const displayList = function (user) {
     listBlockEl.innerHTML = "";
+    listItemCounterEl.textContent = "";
 
-    const works = sort
-        ? user.todo.do.slice().sort((a, b) => a - b)
-        : user.todo.do;
+    const todo = user.todo.do;
+    const done = user.todo.done;
 
-    works.forEach(function (work, i) {
-        const html = `
-        <div class="card__item">
-            <span class="checkmark"></span>
-            <div class="text crossed">${work}</div>
-            <div class="exit"></div>
-      </div>
-      `;
-
-        listBlockEl.insertAdjacentHTML("afterbegin", html);
+    todo.forEach(function (work) {
+        const html = generateItemHtml(work, "");
+        listBlockEl.insertAdjacentHTML("beforeend", html);
     });
+    done.forEach(function (work) {
+        const html = generateItemHtml(work, "crossed");
+        listBlockEl.insertAdjacentHTML("beforeend", html);
+    });
+
+    listItemCounterEl.textContent = `${todo.length} items left`;
 };
 
 const updateUI = function (user) {
@@ -112,22 +119,30 @@ loginBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
     currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
-    console.log(currentAccount);
 
     if (currentAccount?.password === inputPassword.value) {
         inputName.value = inputPassword.value = "";
         closeModal();
+        updateUI(currentAccount);
+    }
+});
+signupBtn.addEventListener("click", function (e) {
+    e.preventDefault();
 
+    currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
+    if (!currentAccount) {
+        currentAccount = {
+            user: inputName.value,
+            password: inputPassword.value,
+            todo: { do: [], done: [] },
+        };
+        dummyLists.push(currentAccount);
+        inputName.value = inputPassword.value = "";
+        closeModal();
         updateUI(currentAccount);
     }
 });
 
 const appLoad = function () {
-    window.addEventListener("load", function () {
-        if (loggedIn) {
-            console.log("logged in");
-        } else {
-            console.log("not logged in");
-        }
-    });
+    window.addEventListener("load", function () {});
 };
