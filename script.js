@@ -26,10 +26,12 @@ const dummyLists = [
 const loginBtn = document.querySelector(".header__login");
 const themeSwitchBtn = document.querySelector(".header__theme");
 const dragAndDrop = document.querySelector(".bottom");
+const cancelBtn = document.querySelector(".btn__cancel");
 
 // overlays
 const loginOverlay = document.querySelector(".login");
 const overlay = document.querySelector(".overlay");
+const theme = document.querySelector(".theme-switch");
 
 // other
 const inputField = document.querySelector(".text__input");
@@ -39,14 +41,24 @@ const listItemCounterEl = document.querySelector(".items-left");
 // VARIABLES
 
 // HELPER FUNCTIONS
+const closeModal = function () {
+    loginOverlay.close();
+    overlay.classList.add("hidden");
+};
+const openModal = function () {
+    loginOverlay.showModal();
+    overlay.classList.remove("hidden");
+};
 
 // EVENT LISTENERS
 loginBtn.addEventListener("click", function () {
-    loginOverlay.showModal();
-    overlay.classList.remove("hidden");
+    openModal();
+});
+cancelBtn.addEventListener("click", function () {
+    closeModal();
 });
 
-overlay.addEventListener("click", function () {
-    loginOverlay.closest();
-    overlay.classList.add("hidden");
+themeSwitchBtn.addEventListener("click", function () {
+    theme.classList.toggle("theme-1");
+    theme.classList.toggle("theme-2");
 });

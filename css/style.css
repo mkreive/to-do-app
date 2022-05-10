@@ -6,7 +6,8 @@
   --color-text: hsl(235, 19%, 35%);
   --color-footer: hsl(236, 9%, 61%);
   --background-image-desktop: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-desktop-light_seds72.jpg");
-  --background-image-mobile: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-mobile-light_xd1knv.jpg"); }
+  --background-image-mobile: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-mobile-light_xd1knv.jpg");
+  --theme-icon: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-moon_j88jkv.svg"); }
 
 .theme-2 {
   --color-background: hsl(235, 21%, 11%);
@@ -17,7 +18,8 @@
   --color-footer: hsl(234, 11%, 52%);
   --color-7: hsl(237, 14%, 26%);
   --background-image-desktop: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-desktop-dark_jv48fe.jpg");
-  --background-image-mobile: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-mobile-dark_kgbv7h.jpg"); }
+  --background-image-mobile: url("https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/bg-mobile-dark_kgbv7h.jpg");
+  --theme-icon: url("https://res.cloudinary.com/kreiva/image/upload/v1651823441/FrontendMentor/ToDoListApp/icon-sun_odmloi.svg"); }
 
 /*
 0 - 600px:      Phone
@@ -168,13 +170,11 @@ body {
     letter-spacing: 1.8rem;
     flex: 1; }
   .header__theme {
-    background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-moon_j88jkv.svg);
+    background-image: var(--theme-icon);
     background-repeat: no-repeat;
     background-position: center;
     width: 5rem;
     height: 5rem; }
-    .header__theme:hover {
-      cursor: pointer; }
   .header__login {
     background-image: url("https://res.cloudinary.com/kreiva/image/upload/v1652166389/FrontendMentor/ToDoListApp/faciukas2_ioa2qu.png");
     background-repeat: no-repeat;
