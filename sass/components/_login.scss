@@ -1,18 +1,48 @@
 .login {
-    width: 100%;
-    background-color: white;
-    box-shadow: 0px 8px rgba(0, 0, 0, 0.171);
+    width: 30vw;
+    background-color: var(--color-background);
     border-radius: 0.5rem;
-    padding: 3rem;
+    padding: 4rem;
+    @include absCenter;
+    border: none;
+
+    &__form {
+        &-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            height: 4rem;
+            margin-bottom: $margin-bottom-small;
+            border-radius: 0.3rem;
+            font-size: $font-size-text;
+            color: var(--color-text);
+            padding: 2rem;
+            background-color: var(--color-card);
+
+            &::placeholder {
+                font-weight: $font-weight-light;
+                color: var(--color-borders);
+                opacity: 1;
+            }
+        }
+    }
+
+    &__header {
+        text-transform: uppercase;
+        color: var(--color-text);
+        margin-bottom: $margin-bottom-big;
+    }
 
     &__terms {
+        margin-top: $margin-bottom-small;
+        margin-bottom: $margin-bottom-big;
         text-align: center;
-        color: red;
-        font-weight: 500;
+        color: var(--color-footer);
+        font-weight: $font-weight-light;
+        font-size: $font-size-main;
     }
     &__link {
-        color: red;
-        font-weight: 700;
+        color: var(--color-text);
         text-decoration: none;
     }
 }

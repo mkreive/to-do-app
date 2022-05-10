@@ -67,13 +67,13 @@
                       </div>
                     
                       <div class="card__item footer">
-                        <span class="footer__text">4 items left</span>
+                        <span class="footer__text items-left">4 items left</span>
                         <div class="footer__group">
-                          <span class="footer__text active ">All</span>
+                          <span class="footer__text active">All</span>
                           <span class="footer__text">Active</span>
                           <span class="footer__text">Completed</span>
                         </div>
-                        <span class="footer__text">Clear Completed</span>
+                        <span class="footer__text clear">Clear Completed</span>
                       </div>
                     </div>
 
@@ -84,12 +84,12 @@
                     <div class="overlay hidden"></div>
 
                     <dialog class="login">
-                      <h1>Please login:</h1>
+                      <h1 class="login__header  text">Login / SignUp</h1>
                       <form action="/form.php" class="form" name="submitForm" method="post">
                 
-                        <div class="form-field">
+                        <div class="login__form">
                             <input
-                                class="input__success"
+                                class="login__form-input"
                                 type="text"
                                 placeholder="Name"
                                 name="name"
@@ -97,9 +97,9 @@
                             />
                         </div>
 
-                        <div class="form-field">
+                        <div class="login__form">
                             <input
-                                class="input__success"
+                                class="login__form-input"
                                 id="password"
                                 type="password"
                                 placeholder="Password"
@@ -118,7 +118,7 @@
 
                         <button class=" btn btn__signup">SignUp</button>
                         <button class=" btn btn__login">Login</button>
-                        <button class=" btn btn__cancel">Login</button>
+                        <button class=" btn btn__cancel">Cancel</button>
                       </form>
                   </dialog>
                 </div>

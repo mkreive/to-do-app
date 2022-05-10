@@ -252,38 +252,59 @@ body {
 
 .btn {
   width: 100%;
-  background-color: red;
-  box-shadow: 0px 4px #30b57c;
-  color: white;
+  color: var(--color-logo);
   padding: 1rem;
-  border-radius: 0.5rem;
-  font-size: 160%;
-  font-weight: 600;
+  border-radius: 0.3rem;
+  font-size: 1.3rem;
   text-align: center;
   margin-bottom: 1rem;
   text-transform: uppercase;
   border: none;
   cursor: pointer; }
-  .btn__signup {
-    background-color: green; }
-  .btn__login {
-    background-color: violet; }
+  .btn__signup, .btn__login {
+    background-color: #c058f3; }
   .btn__cancel {
-    background-color: pink; }
+    background-color: var(--color-text); }
+  .btn:hover {
+    background-color: #3a7bfd; }
 
 .login {
-  width: 100%;
-  background-color: white;
-  box-shadow: 0px 8px rgba(0, 0, 0, 0.171);
+  width: 30vw;
+  background-color: var(--color-background);
   border-radius: 0.5rem;
-  padding: 3rem; }
+  padding: 4rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none; }
+  .login__form-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    height: 4rem;
+    margin-bottom: 1rem;
+    border-radius: 0.3rem;
+    font-size: 2rem;
+    color: var(--color-text);
+    padding: 2rem;
+    background-color: var(--color-card); }
+    .login__form-input::placeholder {
+      font-weight: 400;
+      color: var(--color-borders);
+      opacity: 1; }
+  .login__header {
+    text-transform: uppercase;
+    color: var(--color-text);
+    margin-bottom: 3rem; }
   .login__terms {
+    margin-top: 1rem;
+    margin-bottom: 3rem;
     text-align: center;
-    color: red;
-    font-weight: 500; }
+    color: var(--color-footer);
+    font-weight: 400;
+    font-size: 1.3rem; }
   .login__link {
-    color: red;
-    font-weight: 700;
+    color: var(--color-text);
     text-decoration: none; }
 
 .overlay {
