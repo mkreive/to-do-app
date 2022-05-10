@@ -3,6 +3,9 @@
     justify-content: space-between;
     font-size: $font-size-footer;
     color: var(--color-footer);
+    border-bottom: none !important;
+    border-bottom-left-radius: 0.7rem;
+    border-bottom-right-radius: 0.7rem;
 
     &:hover {
         background-image: none !important;

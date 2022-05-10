@@ -188,7 +188,10 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 1.4rem;
-  color: var(--color-footer); }
+  color: var(--color-footer);
+  border-bottom: none !important;
+  border-bottom-left-radius: 0.7rem;
+  border-bottom-right-radius: 0.7rem; }
   .footer:hover {
     background-image: none !important; }
   .footer__text {
@@ -206,25 +209,24 @@ body {
 .card {
   display: flex;
   flex-direction: column;
-  width: 100%; }
+  width: 100%;
+  border-radius: 0.7rem; }
   .card__item {
     display: flex;
     background-color: var(--color-card);
     align-items: center;
-    padding: 2.5rem; }
-    .card__item:first-child {
+    padding: 2.5rem;
+    border-bottom: 1px solid var(--color-borders); }
+    .card__item-input {
       margin-bottom: 3rem;
       border-radius: 0.7rem;
       border: none; }
-    .card__item:not(:last-child) {
-      border-bottom: 1px solid var(--color-borders); }
-    .card__item:last-child {
-      border-bottom-left-radius: 0.7rem;
-      border-bottom-right-radius: 0.7rem; }
-    .card__item:nth-child(2) {
-      border-top-left-radius: 0.7rem;
-      border-top-right-radius: 0.7rem; }
-    .card__item:hover:not(:first-child) {
+  .card__list-items {
+    background-color: red;
+    border-top-left-radius: 0.7rem;
+    border-top-right-radius: 0.7rem; }
+    .card__list-items:hover {
+      background-color: red;
       background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-cross_a9tvlw.svg);
       background-repeat: no-repeat;
       background-position: 95%; }
