@@ -5,19 +5,23 @@ const dummyLists = [
     {
         user: "Monika",
         password: "monkey",
-        toDoList: [
-            "Walk dogs to the forest",
-            "Do yoga",
-            "Play a board game with family",
-            "Read a book",
-        ],
-        doneList: ["Complete React online course", "Do dishes"],
+        todo: {
+            do: [
+                "Walk dogs to the forest",
+                "Do yoga",
+                "Play a board game with family",
+                "Read a book",
+            ],
+            done: ["Complete React online course", "Do dishes"],
+        },
     },
     {
         user: "Jonas",
         password: "jonas",
-        toDoList: ["Buy apartment", "Go outside", "Play a board game"],
-        doneList: ["Finish project at work", "Feed the fish"],
+        todo: {
+            do: ["Finish project at work", "Buy apartment", "Read a book"],
+            done: ["Feed the fish"],
+        },
     },
 ];
 
@@ -39,13 +43,14 @@ const theme = document.querySelector(".theme-switch");
 const inputField = document.querySelector(".text__input");
 const listItems = document.querySelectorAll(".card__item");
 const listItemCounterEl = document.querySelector(".items-left");
-const cardBlock = card.document.querySelector(".card");
+const listBlockEl = document.querySelector(".card__list-items");
 
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
 
 // VARIABLES
 let loggedIn = false;
+let currentAccount;
 
 // HELPER FUNCTIONS
 const closeModal = function () {
@@ -78,51 +83,42 @@ themeSwitchBtn.addEventListener("click", function () {
 });
 
 // display list
-const displayList = function (acc, sort = false) {
-    containerMovements.innerHTML = "";
+const displayList = function (user, sort = false) {
+    listBlockEl.innerHTML = "";
 
-    const movs = sort
-        ? acc.movements.slice().sort((a, b) => a - b)
-        : acc.movements;
+    const works = sort
+        ? user.todo.do.slice().sort((a, b) => a - b)
+        : user.todo.do;
 
-    movs.forEach(function (mov, i) {
-        const type = mov > 0 ? "deposit" : "withdrawal";
-
-        const date = new Date(acc.movementsDates[i]);
-        const displayDate = formatMovementDate(date, acc.locale);
-
-        const formattedMov = formatCur(mov, acc.locale, acc.currency);
-
+    works.forEach(function (work, i) {
         const html = `
-        <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${
-            i + 1
-        } ${type}</div>
-          <div class="movements__date">${displayDate}</div>
-          <div class="movements__value">${formattedMov}</div>
-        </div>
+        <div class="card__item">
+            <span class="checkmark"></span>
+            <div class="text crossed">${work}</div>
+            <div class="exit"></div>
+      </div>
       `;
 
-        containerMovements.insertAdjacentHTML("afterbegin", html);
+        listBlockEl.insertAdjacentHTML("afterbegin", html);
     });
 };
 
+const updateUI = function (user) {
+    displayList(user);
+};
+
 // login/signup
-loginBtn.addEventListener("click", function () {
-    const userName = inputName.value.trim().toLowerCase();
-    const userpassword = inputPassword.value;
-    const userData = dummyLists.find(
-        (element) => element.user == userName.toLowerCase()
-    );
+loginBtn.addEventListener("click", function (e) {
+    e.preventDefault();
 
-    console.log(userName);
-    console.log(userpassword);
+    currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
+    console.log(currentAccount);
 
-    if (userData && userData.password == userpassword) {
-        loggedIn = true;
-        loginIcon.style.backgroundImage =
-            "url('https://res.cloudinary.com/kreiva/image/upload/v1652166389/FrontendMentor/ToDoListApp/logout2_uirmed.png')";
-        // appLoad();
+    if (currentAccount?.password === inputPassword.value) {
+        inputName.value = inputPassword.value = "";
+        closeModal();
+
+        updateUI(currentAccount);
     }
 });
 
@@ -135,5 +131,3 @@ const appLoad = function () {
         }
     });
 };
-
-appLoad();

@@ -222,7 +222,7 @@ body {
       border-radius: 0.7rem;
       border: none; }
   .card__list-items {
-    background-color: red;
+    background-color: red !important;
     border-top-left-radius: 0.7rem;
     border-top-right-radius: 0.7rem; }
     .card__list-items:hover {

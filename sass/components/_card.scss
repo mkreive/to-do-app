@@ -19,13 +19,12 @@
     }
 
     &__list-items {
-        background-color: red;
+        background-color: red !important;
         border-top-left-radius: 0.7rem;
         border-top-right-radius: 0.7rem;
 
         &:hover {
             background-color: red;
-
             background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-cross_a9tvlw.svg);
             background-repeat: no-repeat;
             background-position: 95%;
