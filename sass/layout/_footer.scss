@@ -4,6 +4,10 @@
     font-size: $font-size-footer;
     color: var(--color-footer);
 
+    &:hover {
+        background-image: none !important;
+    }
+
     &__text {
         margin-right: 1rem;
 

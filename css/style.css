@@ -172,6 +172,8 @@ body {
   justify-content: space-between;
   font-size: 1.4rem;
   color: var(--color-footer); }
+  .footer:hover {
+    background-image: none !important; }
   .footer__text {
     margin-right: 1rem; }
     .footer__text:hover {
@@ -205,7 +207,7 @@ body {
     .card__item:nth-child(2) {
       border-top-left-radius: 0.7rem;
       border-top-right-radius: 0.7rem; }
-    .card__item:hover {
+    .card__item:hover:not(:first-child) {
       background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-cross_a9tvlw.svg);
       background-repeat: no-repeat;
       background-position: 95%; }
