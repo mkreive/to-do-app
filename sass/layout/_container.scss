@@ -2,11 +2,13 @@
     display: grid;
     place-items: center;
     width: 100vw;
-    height: 100vh;
+    height: auto;
+    min-height: 100vh;
     background-color: var(--color-background);
     background-image: var(--background-image-desktop);
     background-repeat: no-repeat;
     background-size: 100vw 40vh;
+    overflow: scroll;
 
     @include respond(phone) {
         background-image: var(--background-image-mobile);

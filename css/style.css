@@ -130,11 +130,13 @@ body {
   display: grid;
   place-items: center;
   width: 100vw;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   background-color: var(--color-background);
   background-image: var(--background-image-desktop);
   background-repeat: no-repeat;
-  background-size: 100vw 40vh; }
+  background-size: 100vw 40vh;
+  overflow: scroll; }
   @media only screen and (max-width: 37.5em) {
     .container {
       background-image: var(--background-image-mobile);
@@ -204,7 +206,8 @@ body {
   align-self: center;
   color: var(--color-footer);
   font-size: 1.4rem;
-  margin-top: 3rem; }
+  margin-top: 3rem;
+  margin-bottom: 3rem; }
 
 .card {
   display: flex;
@@ -217,16 +220,14 @@ body {
     align-items: center;
     padding: 2.5rem;
     border-bottom: 1px solid var(--color-borders); }
+    .card__item:first-child {
+      border-top-left-radius: 0.7rem;
+      border-top-right-radius: 0.7rem; }
     .card__item-input {
       margin-bottom: 3rem;
       border-radius: 0.7rem;
       border: none; }
-  .card__list-items {
-    background-color: red !important;
-    border-top-left-radius: 0.7rem;
-    border-top-right-radius: 0.7rem; }
-    .card__list-items:hover {
-      background-color: red;
+    .card__item:hover {
       background-image: url(https://res.cloudinary.com/kreiva/image/upload/v1651823440/FrontendMentor/ToDoListApp/icon-cross_a9tvlw.svg);
       background-repeat: no-repeat;
       background-position: 95%; }
@@ -269,6 +270,11 @@ body {
     background-color: var(--color-text); }
   .btn:hover {
     background-color: #3a7bfd; }
+  .btn__exit {
+    width: 4rem;
+    height: 4rem; }
+    .btn__exit:hover {
+      cursor: pointer; }
 
 .login {
   width: 30vw;

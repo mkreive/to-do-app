@@ -23,4 +23,12 @@
     &:hover {
         background-color: $color-primary-dark-blue;
     }
+
+    &__exit {
+        width: 4rem;
+        height: 4rem;
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }

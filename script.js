@@ -49,10 +49,9 @@ const theme = document.querySelector(".theme-switch");
 
 // other
 const inputField = document.querySelector(".text__input");
-const listItems = document.querySelectorAll(".card__item");
+// const listItems = document.querySelectorAll(".card__item");
 const listItemCounterEl = document.querySelector(".items-left");
 const listBlockEl = document.querySelector(".card__list-items");
-const checkmarks = document.querySelectorAll(".checkmark");
 
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
@@ -78,7 +77,7 @@ const generateItemHtml = function (value, classes) {
     <div class="card__item">
         <span class="checkmark"></span>
         <div class="text ${classes}">${value}</div>
-        <div class="exit"></div>
+        <div class="btn__exit"></div>
     </div>`;
 };
 
@@ -109,6 +108,33 @@ themeSwitchBtn.addEventListener("click", function () {
     theme.classList.toggle("theme-2");
 });
 
+// checkmark task as done
+const taskElementListener = function () {
+    const listItems = document.querySelectorAll(".card__item");
+    const checkmarks = document.querySelectorAll(".checkmark");
+
+    listItems.forEach((item) =>
+        item.addEventListener("click", function (e) {
+            const taskClicked = e.target;
+
+            if (taskClicked.classList.contains("checkmark")) {
+                taskClicked.classList.add("checked");
+                const checkedItem = taskClicked.nextElementSibling;
+                checkedItem.classList.add("crossed");
+
+                if (currentAccount) {
+                    currentAccount.todo.do.filter(
+                        (task) => task != checkedItem.innerHTML
+                    );
+                    currentAccount.todo.done.push(checkedItem.innerHTML);
+                }
+            } else if (taskClicked.classList.contains("exit")) {
+                console.log("please exit");
+            }
+        })
+    );
+};
+
 // display list of tasks
 const displayList = function (user) {
     listBlockEl.innerHTML = "";
@@ -127,6 +153,7 @@ const displayList = function (user) {
     });
 
     listItemCounterEl.textContent = `${todo.length} items left`;
+    taskElementListener();
 };
 
 // update UI
@@ -148,9 +175,9 @@ loginBtn.addEventListener("click", function (e) {
 });
 signupBtn.addEventListener("click", function (e) {
     e.preventDefault();
-
     currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
-    if (!currentAccount) {
+
+    if (!currentAccount && inputName.value) {
         currentAccount = {
             user: inputName.value,
             password: inputPassword.value,
@@ -169,27 +196,10 @@ inputField.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && inputField.value && currentAccount) {
         addNewTask(currentAccount, newItem);
     } else if (e.key === "Enter" && inputField.value && !currentAccount) {
-        currentAccount = dummyLists.filter((user) => user.user === "Dummy");
+        [currentAccount] = dummyLists.filter((user) => user.user === "Dummy");
         addNewTask(currentAccount, newItem);
     }
 });
-
-// checkmark done task
-checkmarks.forEach((checkmark) =>
-    checkmark.addEventListener("click", function (e) {
-        e.target.classList.add("checked");
-        const checkedItem = e.target.nextElementSibling;
-        checkedItem.classList.add("crossed");
-
-        if (currentAccount) {
-            currentAccount.todo.do.filter(
-                (task) => task != checkedItem.innerHTML
-            );
-            currentAccount.todo.done.push(checkedItem.innerHTML);
-            console.log(currentAccount.todo);
-        }
-    })
-);
 
 // filter tasks
 
