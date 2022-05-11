@@ -23,6 +23,14 @@ const dummyLists = [
             done: ["Feed the fish"],
         },
     },
+    {
+        user: "Dummy",
+        password: "",
+        todo: {
+            do: [],
+            done: [],
+        },
+    },
 ];
 
 // SELECTORS
@@ -44,6 +52,7 @@ const inputField = document.querySelector(".text__input");
 const listItems = document.querySelectorAll(".card__item");
 const listItemCounterEl = document.querySelector(".items-left");
 const listBlockEl = document.querySelector(".card__list-items");
+const checkmarks = document.querySelectorAll(".checkmark");
 
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
@@ -53,6 +62,7 @@ let loggedIn = false;
 let currentAccount;
 
 // HELPER FUNCTIONS
+// close open modal
 const closeModal = function () {
     loginOverlay.close();
     overlay.classList.add("hidden");
@@ -61,6 +71,8 @@ const openModal = function () {
     loginOverlay.showModal();
     overlay.classList.remove("hidden");
 };
+
+// generate html task line
 const generateItemHtml = function (value, classes) {
     return `
     <div class="card__item">
@@ -68,6 +80,13 @@ const generateItemHtml = function (value, classes) {
         <div class="text ${classes}">${value}</div>
         <div class="exit"></div>
     </div>`;
+};
+
+// adding new task line
+const addNewTask = function (account, task) {
+    inputField.value = "";
+    account.todo.do.push(task);
+    updateUI(account);
 };
 
 // EVENT LISTENERS
@@ -90,7 +109,7 @@ themeSwitchBtn.addEventListener("click", function () {
     theme.classList.toggle("theme-2");
 });
 
-// display list
+// display list of tasks
 const displayList = function (user) {
     listBlockEl.innerHTML = "";
     listItemCounterEl.textContent = "";
@@ -110,11 +129,12 @@ const displayList = function (user) {
     listItemCounterEl.textContent = `${todo.length} items left`;
 };
 
+// update UI
 const updateUI = function (user) {
     displayList(user);
 };
 
-// login/signup
+// login/signup forms
 loginBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
@@ -142,6 +162,42 @@ signupBtn.addEventListener("click", function (e) {
         updateUI(currentAccount);
     }
 });
+
+// user enters new task
+inputField.addEventListener("keydown", function (e) {
+    const newItem = inputField.value;
+    if (e.key === "Enter" && inputField.value && currentAccount) {
+        addNewTask(currentAccount, newItem);
+    } else if (e.key === "Enter" && inputField.value && !currentAccount) {
+        currentAccount = dummyLists.filter((user) => user.user === "Dummy");
+        addNewTask(currentAccount, newItem);
+    }
+});
+
+// checkmark done task
+checkmarks.forEach((checkmark) =>
+    checkmark.addEventListener("click", function (e) {
+        e.target.classList.add("checked");
+        const checkedItem = e.target.nextElementSibling;
+        checkedItem.classList.add("crossed");
+
+        if (currentAccount) {
+            currentAccount.todo.do.filter(
+                (task) => task != checkedItem.innerHTML
+            );
+            currentAccount.todo.done.push(checkedItem.innerHTML);
+            console.log(currentAccount.todo);
+        }
+    })
+);
+
+// filter tasks
+
+// clear list
+
+// drag and drop
+
+// page load
 
 const appLoad = function () {
     window.addEventListener("load", function () {});
