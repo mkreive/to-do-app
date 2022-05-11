@@ -271,8 +271,8 @@ body {
   .btn:hover {
     background-color: #3a7bfd; }
   .btn__exit {
-    width: 4rem;
-    height: 4rem; }
+    width: 3rem;
+    height: 3rem; }
     .btn__exit:hover {
       cursor: pointer; }
 

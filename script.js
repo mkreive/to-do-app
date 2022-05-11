@@ -111,7 +111,6 @@ themeSwitchBtn.addEventListener("click", function () {
 // checkmark task as done
 const taskElementListener = function () {
     const listItems = document.querySelectorAll(".card__item");
-    const checkmarks = document.querySelectorAll(".checkmark");
 
     listItems.forEach((item) =>
         item.addEventListener("click", function (e) {
@@ -123,13 +122,14 @@ const taskElementListener = function () {
                 checkedItem.classList.add("crossed");
 
                 if (currentAccount) {
-                    currentAccount.todo.do.filter(
+                    const newToDoList = currentAccount.todo.do.filter(
                         (task) => task != checkedItem.innerHTML
                     );
+                    currentAccount.todo.do = newToDoList;
                     currentAccount.todo.done.push(checkedItem.innerHTML);
                 }
-            } else if (taskClicked.classList.contains("exit")) {
-                console.log("please exit");
+            } else if (taskClicked.classList.contains("btn__exit")) {
+                // delte from vaizdas ir is duombazes
             }
         })
     );
