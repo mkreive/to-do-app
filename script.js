@@ -72,11 +72,11 @@ const openModal = function () {
 };
 
 // generate html task line
-const generateItemHtml = function (value, classes) {
+const generateItemHtml = function (value, checkmarkCl, textCl) {
     return `
     <div class="card__item">
-        <span class="checkmark"></span>
-        <div class="text ${classes}">${value}</div>
+        <span class="checkmark ${checkmarkCl}"></span>
+        <div class="text ${textCl}">${value}</div>
         <div class="btn__exit"></div>
     </div>`;
 };
@@ -144,11 +144,11 @@ const displayList = function (user) {
     const done = user.todo.done;
 
     todo.forEach(function (work) {
-        const html = generateItemHtml(work, "");
+        const html = generateItemHtml(work, "", "");
         listBlockEl.insertAdjacentHTML("beforeend", html);
     });
     done.forEach(function (work) {
-        const html = generateItemHtml(work, "crossed");
+        const html = generateItemHtml(work, "checked", "crossed");
         listBlockEl.insertAdjacentHTML("beforeend", html);
     });
 
@@ -171,6 +171,8 @@ loginBtn.addEventListener("click", function (e) {
         inputName.value = inputPassword.value = "";
         closeModal();
         updateUI(currentAccount);
+        loginIcon.style.backgroundImage = "none";
+        loginIcon.textContent = `Hello, ${currentAccount.user}`;
     }
 });
 signupBtn.addEventListener("click", function (e) {

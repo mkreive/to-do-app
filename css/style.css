@@ -181,8 +181,13 @@ body {
     background-image: url("https://res.cloudinary.com/kreiva/image/upload/v1652166389/FrontendMentor/ToDoListApp/faciukas2_ioa2qu.png");
     background-repeat: no-repeat;
     background-position: center;
-    width: 5rem;
-    height: 5rem; }
+    width: fit-content;
+    height: fit-content;
+    min-width: 3rem;
+    min-height: 3rem;
+    color: var(--color-logo);
+    font-size: 2rem;
+    align-self: flex-end; }
     .header__login:hover {
       cursor: pointer; }
 
