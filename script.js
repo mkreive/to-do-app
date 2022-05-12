@@ -73,6 +73,15 @@ const openModal = function (modal) {
     modal.showModal();
     overlay.classList.remove("hidden");
 };
+// error popup
+const errorPopup = function (message) {
+    openModal(errorCard);
+    errorMessageEl.textContent = message;
+    const gotItBtn = document.querySelector(".btn__got-it");
+    gotItBtn.addEventListener("click", function () {
+        errorCard.close();
+    });
+};
 
 // generate list item HTML
 const generateItemHtml = function (value, checkmarkCl, textCl) {
@@ -117,7 +126,13 @@ const crossOutTask = function (account, task) {
     account.todo.done.push(task);
     updateCounter(newToDoList);
 };
-const deleteTask = function (account, task) {};
+const deleteTask = function (account, task) {
+    const newDoList = account.todo.do.filter((item) => item != task);
+    const newDoneList = account.todo.done.filter((item) => item != task);
+    account.todo.do = newDoList;
+    account.todo.done = newDoneList;
+    updateCounter(newDoList);
+};
 
 const updateCounter = function (list) {
     listItemCounterEl.textContent = `${list.length} items left`;
@@ -143,7 +158,8 @@ const logedInMessage = function (account) {
 // open/close login modal
 document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
-        closeModal();
+        closeModal(loginOverlay);
+        closeModal(errorCard);
     }
 });
 loginIcon.addEventListener("click", function () {
@@ -158,6 +174,8 @@ inputField.addEventListener("keydown", function (e) {
     } else if (e.key === "Enter" && inputField.value && !currentAccount) {
         [currentAccount] = dummyLists.filter((user) => user.user === "Dummy");
         addNewTask(currentAccount, newItem);
+    } else if (e.key === "Enter" && !inputField.value) {
+        errorPopup("Input shouldn't be empty..");
     }
 });
 
@@ -178,7 +196,10 @@ const taskElementListener = function () {
                     crossOutTask(currentAccount, checkedItem.textContent);
                 }
             } else if (taskClicked.classList.contains("btn__exit")) {
-                // delte from vaizdas ir is duombazes
+                taskClicked.parentElement.remove();
+                const removedItem =
+                    taskClicked.previousElementSibling.textContent;
+                deleteTask(currentAccount, removedItem);
             }
         })
     );
@@ -234,16 +255,6 @@ cancelBtn.addEventListener("click", function () {
     closeModal(loginOverlay);
     console.log(currentAccount);
 });
-
-// error popup
-const errorPopup = function (message) {
-    openModal(errorCard);
-    errorMessageEl.textContent = message;
-    const gotItBtn = document.querySelector(".btn__got-it");
-    gotItBtn.addEventListener("click", function () {
-        errorCard.close();
-    });
-};
 
 // filter tasks
 

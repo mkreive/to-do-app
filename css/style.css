@@ -337,6 +337,7 @@ body {
   transition: all 0.5s; }
 
 .error {
+  z-index: 99;
   width: 30vw;
   background-color: var(--color-background);
   border-radius: 0.5rem;
