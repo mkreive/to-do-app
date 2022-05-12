@@ -61,7 +61,7 @@ const dragAndDrop = document.querySelector(".bottom");
 const overlay = document.querySelector(".overlay");
 
 /////////// VARIABLES
-let currentAccount;
+let currentAccount = "";
 
 /////////// HELPER FUNCTIONS
 // modal
@@ -101,7 +101,7 @@ const displayList = function (user) {
         listBlockEl.insertAdjacentHTML("beforeend", html);
     });
 
-    listItemCounterEl.textContent = `${todo.length} items left`;
+    updateCounter(todo);
     taskElementListener();
 };
 
@@ -110,6 +110,17 @@ const addNewTask = function (account, task) {
     inputField.value = "";
     account.todo.do.push(task);
     updateUI(account);
+};
+const crossOutTask = function (account, task) {
+    const newToDoList = account.todo.do.filter((item) => item != task);
+    account.todo.do = newToDoList;
+    account.todo.done.push(task);
+    updateCounter(newToDoList);
+};
+const deleteTask = function (account, task) {};
+
+const updateCounter = function (list) {
+    listItemCounterEl.textContent = `${list.length} items left`;
 };
 
 // update UI
@@ -164,11 +175,7 @@ const taskElementListener = function () {
                 checkedItem.classList.add("crossed");
 
                 if (currentAccount) {
-                    const newToDoList = currentAccount.todo.do.filter(
-                        (task) => task != checkedItem.innerHTML
-                    );
-                    currentAccount.todo.do = newToDoList;
-                    currentAccount.todo.done.push(checkedItem.innerHTML);
+                    crossOutTask(currentAccount, checkedItem.textContent);
                 }
             } else if (taskClicked.classList.contains("btn__exit")) {
                 // delte from vaizdas ir is duombazes
@@ -244,12 +251,12 @@ const errorPopup = function (message) {
 
 // drag and drop
 
-// page load
-
 /////////// LOADING APP
 const appLoad = function () {
     window.addEventListener("load", function () {
-        currentAccount = "";
+        currentAccount = dummyLists[0];
+        updateUI(currentAccount);
+        logedInMessage(currentAccount);
     });
 };
 appLoad();
