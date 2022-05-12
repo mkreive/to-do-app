@@ -1,6 +1,6 @@
 "use strict";
 
-// DATA
+/////////// DUMMY DATA
 const dummyLists = [
     {
         user: "Monika",
@@ -33,36 +33,38 @@ const dummyLists = [
     },
 ];
 
-// SELECTORS
-// buttons
-const loginIcon = document.querySelector(".header__login");
+/////////// SELECTORS
+// theme
 const themeSwitchBtn = document.querySelector(".header__theme");
-const dragAndDrop = document.querySelector(".bottom");
-const cancelBtn = document.querySelector(".btn__cancel");
-const loginBtn = document.querySelector(".btn__login");
-const signupBtn = document.querySelector(".btn__signup");
-
-// overlays
-const loginOverlay = document.querySelector(".login");
-const overlay = document.querySelector(".overlay");
 const theme = document.querySelector(".theme-switch");
 
-// other
-const inputField = document.querySelector(".text__input");
-// const listItems = document.querySelectorAll(".card__item");
-const listItemCounterEl = document.querySelector(".items-left");
-const listBlockEl = document.querySelector(".card__list-items");
-
-const inputName = document.getElementById("name");
-const inputPassword = document.getElementById("password");
+// error elements
 const errorCard = document.querySelector(".error");
 const errorMessageEl = document.querySelector(".error__message");
 
-// VARIABLES
+// list items
+const inputField = document.querySelector(".text__input");
+const listBlockEl = document.querySelector(".card__list-items");
+const listItemCounterEl = document.querySelector(".items-left");
+
+// login/signup
+const loginOverlay = document.querySelector(".login");
+const loginIcon = document.querySelector(".header__login");
+const loginBtn = document.querySelector(".btn__login");
+const signupBtn = document.querySelector(".btn__signup");
+const inputName = document.getElementById("name");
+const inputPassword = document.getElementById("password");
+
+// other
+const dragAndDrop = document.querySelector(".bottom");
+const cancelBtn = document.querySelector(".btn__cancel");
+const overlay = document.querySelector(".overlay");
+
+/////////// VARIABLES
 let currentAccount;
 
-// HELPER FUNCTIONS
-// close open modal
+/////////// HELPER FUNCTIONS
+// modal
 const closeModal = function (modal) {
     modal.close();
     overlay.classList.add("hidden");
@@ -72,7 +74,7 @@ const openModal = function (modal) {
     overlay.classList.remove("hidden");
 };
 
-// generate html task line
+// generate list item HTML
 const generateItemHtml = function (value, checkmarkCl, textCl) {
     return `
     <div class="card__item">
@@ -82,40 +84,70 @@ const generateItemHtml = function (value, checkmarkCl, textCl) {
     </div>`;
 };
 
-// error popup
-const errorPopup = function (message) {
-    openModal(errorCard);
-    errorMessageEl.textContent = message;
+// display list
+const displayList = function (user) {
+    listBlockEl.innerHTML = "";
+    listItemCounterEl.textContent = "";
+
+    const todo = user.todo.do;
+    const done = user.todo.done;
+
+    todo.forEach(function (work) {
+        const html = generateItemHtml(work, "", "");
+        listBlockEl.insertAdjacentHTML("beforeend", html);
+    });
+    done.forEach(function (work) {
+        const html = generateItemHtml(work, "checked", "crossed");
+        listBlockEl.insertAdjacentHTML("beforeend", html);
+    });
+
+    listItemCounterEl.textContent = `${todo.length} items left`;
+    taskElementListener();
 };
 
-// adding new task line
+// adding new task
 const addNewTask = function (account, task) {
     inputField.value = "";
     account.todo.do.push(task);
     updateUI(account);
 };
 
-// EVENT LISTENERS
+// update UI
+const updateUI = function (user) {
+    displayList(user);
+};
+
+/////////// EVENT LISTENERS
+// theme switching
+themeSwitchBtn.addEventListener("click", function () {
+    theme.classList.toggle("theme-1");
+    theme.classList.toggle("theme-2");
+});
 // open/close login modal
 document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
         closeModal();
     }
 });
-loginIcon.addEventListener("click", function () {
-    openModal(loginOverlay);
-});
 cancelBtn.addEventListener("click", function () {
     closeModal(loginOverlay);
 });
-
-// theme switching
-themeSwitchBtn.addEventListener("click", function () {
-    theme.classList.toggle("theme-1");
-    theme.classList.toggle("theme-2");
+loginIcon.addEventListener("click", function () {
+    openModal(loginOverlay);
 });
 
-// checkmark task as done
+// entering new task
+inputField.addEventListener("keydown", function (e) {
+    const newItem = inputField.value;
+    if (e.key === "Enter" && inputField.value && currentAccount) {
+        addNewTask(currentAccount, newItem);
+    } else if (e.key === "Enter" && inputField.value && !currentAccount) {
+        [currentAccount] = dummyLists.filter((user) => user.user === "Dummy");
+        addNewTask(currentAccount, newItem);
+    }
+});
+
+// manipulating with list items
 const taskElementListener = function () {
     const listItems = document.querySelectorAll(".card__item");
 
@@ -142,32 +174,6 @@ const taskElementListener = function () {
     );
 };
 
-// display list of tasks
-const displayList = function (user) {
-    listBlockEl.innerHTML = "";
-    listItemCounterEl.textContent = "";
-
-    const todo = user.todo.do;
-    const done = user.todo.done;
-
-    todo.forEach(function (work) {
-        const html = generateItemHtml(work, "", "");
-        listBlockEl.insertAdjacentHTML("beforeend", html);
-    });
-    done.forEach(function (work) {
-        const html = generateItemHtml(work, "checked", "crossed");
-        listBlockEl.insertAdjacentHTML("beforeend", html);
-    });
-
-    listItemCounterEl.textContent = `${todo.length} items left`;
-    taskElementListener();
-};
-
-// update UI
-const updateUI = function (user) {
-    displayList(user);
-};
-
 // login/signup forms
 loginBtn.addEventListener("click", function (e) {
     e.preventDefault();
@@ -185,6 +191,7 @@ loginBtn.addEventListener("click", function (e) {
         errorPopup("There is no such user, try to signup first");
     }
 });
+
 signupBtn.addEventListener("click", function (e) {
     e.preventDefault();
     currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
@@ -202,16 +209,11 @@ signupBtn.addEventListener("click", function (e) {
     }
 });
 
-// user enters new task
-inputField.addEventListener("keydown", function (e) {
-    const newItem = inputField.value;
-    if (e.key === "Enter" && inputField.value && currentAccount) {
-        addNewTask(currentAccount, newItem);
-    } else if (e.key === "Enter" && inputField.value && !currentAccount) {
-        [currentAccount] = dummyLists.filter((user) => user.user === "Dummy");
-        addNewTask(currentAccount, newItem);
-    }
-});
+// error popup
+const errorPopup = function (message) {
+    openModal(errorCard);
+    errorMessageEl.textContent = message;
+};
 
 // filter tasks
 
@@ -221,6 +223,10 @@ inputField.addEventListener("keydown", function (e) {
 
 // page load
 
+/////////// LOADING APP
 const appLoad = function () {
-    window.addEventListener("load", function () {});
+    window.addEventListener("load", function () {
+        currentAccount = "";
+    });
 };
+appLoad();
