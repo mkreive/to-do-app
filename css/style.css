@@ -162,7 +162,8 @@ body {
   height: 10vh;
   display: flex;
   justify-content: space-between;
-  align-items: baseline; }
+  align-items: baseline;
+  margin-bottom: 1rem; }
   .header__logo {
     color: var(--color-logo);
     text-transform: uppercase;

@@ -62,6 +62,7 @@ const footerBtns = document.querySelectorAll(".footer__text");
 // other
 const dragAndDrop = document.querySelector(".bottom");
 const overlay = document.querySelector(".overlay");
+const dragBtn = document.querySelector(".dragAndDrop");
 
 /////////// VARIABLES
 let currentAccount;
@@ -312,6 +313,13 @@ footerBtns.forEach((btn) => {
 });
 
 // drag and drop
+dragAndDrop.addEventListener(
+    "drag",
+    function (e) {
+        console.log("dragged");
+    },
+    false
+);
 
 /////////// LOADING APP
 const appLoad = function () {
