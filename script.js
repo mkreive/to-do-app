@@ -55,19 +55,20 @@ const listBlockEl = document.querySelector(".card__list-items");
 
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
+const errorCard = document.querySelector(".error");
+const errorMessageEl = document.querySelector(".error__message");
 
 // VARIABLES
-let loggedIn = false;
 let currentAccount;
 
 // HELPER FUNCTIONS
 // close open modal
-const closeModal = function () {
-    loginOverlay.close();
+const closeModal = function (modal) {
+    modal.close();
     overlay.classList.add("hidden");
 };
-const openModal = function () {
-    loginOverlay.showModal();
+const openModal = function (modal) {
+    modal.showModal();
     overlay.classList.remove("hidden");
 };
 
@@ -79,6 +80,12 @@ const generateItemHtml = function (value, checkmarkCl, textCl) {
         <div class="text ${textCl}">${value}</div>
         <div class="btn__exit"></div>
     </div>`;
+};
+
+// error popup
+const errorPopup = function (message) {
+    openModal(errorCard);
+    errorMessageEl.textContent = message;
 };
 
 // adding new task line
@@ -96,10 +103,10 @@ document.addEventListener("keydown", function (e) {
     }
 });
 loginIcon.addEventListener("click", function () {
-    openModal();
+    openModal(loginOverlay);
 });
 cancelBtn.addEventListener("click", function () {
-    closeModal();
+    closeModal(loginOverlay);
 });
 
 // theme switching
@@ -172,7 +179,10 @@ loginBtn.addEventListener("click", function (e) {
         closeModal();
         updateUI(currentAccount);
         loginIcon.style.backgroundImage = "none";
+        loginIcon.style.alignSelf = "flex-end";
         loginIcon.textContent = `Hello, ${currentAccount.user}`;
+    } else {
+        errorPopup("There is no such user, try to signup first");
     }
 });
 signupBtn.addEventListener("click", function (e) {

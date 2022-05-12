@@ -1,0 +1,8 @@
+.error {
+    width: 30vw;
+    background-color: var(--color-background);
+    border-radius: 0.5rem;
+    padding: 4rem;
+    @include absCenter;
+    border: none;
+}
