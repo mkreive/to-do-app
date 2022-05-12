@@ -198,20 +198,34 @@ signupBtn.addEventListener("click", function (e) {
     e.preventDefault();
     currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
 
-    if (!currentAccount && inputName.value) {
+    if (
+        !currentAccount &&
+        inputName.value.trim().length > 4 &&
+        inputPassword.value.trim().length > 4
+    ) {
         currentAccount = {
-            user: inputName.value,
-            password: inputPassword.value,
+            user: inputName.value.trim(),
+            password: inputPassword.value.trim(),
             todo: { do: [], done: [] },
         };
         dummyLists.push(currentAccount);
+
         inputName.value = inputPassword.value = "";
-        closeModal();
+        closeModal(loginOverlay);
         updateUI(currentAccount);
+        logedInMessage(currentAccount);
+    } else {
+        errorPopup(
+            "Username/Password should be at least 5 characters long.. Try again! "
+        );
+        inputName.value = inputPassword.value = "";
     }
 });
+
 cancelBtn.addEventListener("click", function () {
+    inputName.value = inputPassword.value = "";
     closeModal(loginOverlay);
+    console.log(currentAccount);
 });
 
 // error popup
