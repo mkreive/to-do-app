@@ -56,12 +56,16 @@ const cancelBtn = document.querySelector(".btn__cancel");
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
 
+// footer buttons
+const footerBtns = document.querySelectorAll(".footer__text");
+
 // other
 const dragAndDrop = document.querySelector(".bottom");
 const overlay = document.querySelector(".overlay");
 
 /////////// VARIABLES
-let currentAccount = "";
+let currentAccount;
+let prevClickedBtn;
 
 /////////// HELPER FUNCTIONS
 // modal
@@ -114,7 +118,7 @@ const displayList = function (user) {
     taskElementListener();
 };
 
-// adding new task
+// manipulating list items
 const addNewTask = function (account, task) {
     inputField.value = "";
     account.todo.do.push(task);
@@ -134,6 +138,28 @@ const deleteTask = function (account, task) {
     updateCounter(newDoList);
 };
 
+// clear button
+const clearBtnClicked = function (account) {
+    const completedTasks = account.todo.done;
+    if (completedTasks) {
+        completedTasks.forEach((item) => {
+            deleteTask(account, item);
+            updateUI(account);
+        });
+    }
+};
+// show active tasks button
+const showActiveTasks = function (account) {
+    const checkmarkNodes = document.querySelectorAll(".checkmark");
+    let checkmarks = Array.from(checkmarkNodes);
+
+    checkmarks.forEach((item) => {
+        if (item.classList.contains("checked")) {
+            item.parentNode.remove();
+        }
+    });
+};
+
 const updateCounter = function (list) {
     listItemCounterEl.textContent = `${list.length} items left`;
 };
@@ -143,6 +169,13 @@ const updateUI = function (user) {
     displayList(user);
 };
 
+// welcome message
+const logedInMessage = function (account) {
+    loginIcon.style.backgroundImage = "none";
+    loginIcon.style.alignSelf = "flex-end";
+    loginIcon.textContent = `Hello, ${account.user}`;
+};
+
 /////////// EVENT LISTENERS
 // theme switching
 themeSwitchBtn.addEventListener("click", function () {
@@ -150,11 +183,6 @@ themeSwitchBtn.addEventListener("click", function () {
     theme.classList.toggle("theme-2");
 });
 
-const logedInMessage = function (account) {
-    loginIcon.style.backgroundImage = "none";
-    loginIcon.style.alignSelf = "flex-end";
-    loginIcon.textContent = `Hello, ${account.user}`;
-};
 // open/close login modal
 document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
@@ -249,16 +277,33 @@ signupBtn.addEventListener("click", function (e) {
         inputName.value = inputPassword.value = "";
     }
 });
-
 cancelBtn.addEventListener("click", function () {
     inputName.value = inputPassword.value = "";
     closeModal(loginOverlay);
-    console.log(currentAccount);
 });
 
-// filter tasks
+// footer buttons
+footerBtns.forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+        if (prevClickedBtn) {
+            prevClickedBtn.classList.remove("active");
+        }
 
-// clear list
+        const account = currentAccount;
+        const clickedBtn = e.target;
+        clickedBtn.classList.add("active");
+
+        if (clickedBtn.classList.contains("btn-all")) {
+        } else if (clickedBtn.classList.contains("btn-active")) {
+            showActiveTasks(account);
+        } else if (clickedBtn.classList.contains("btn-completed")) {
+            console.log("completed");
+        } else if (clickedBtn.classList.contains("btn-clear")) {
+            clearBtnClicked(account);
+            prevClickedBtn = clickedBtn;
+        }
+    });
+});
 
 // drag and drop
 
