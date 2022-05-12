@@ -20,8 +20,15 @@
         background-color: var(--color-text);
     }
 
+    &__got-it {
+        background-color: var(--color-text);
+        width: auto;
+        margin-bottom: 0;
+    }
+
     &:hover {
         background-color: $color-primary-dark-blue;
+        cursor: pointer;
     }
 
     &__exit {

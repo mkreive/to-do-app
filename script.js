@@ -52,12 +52,12 @@ const loginOverlay = document.querySelector(".login");
 const loginIcon = document.querySelector(".header__login");
 const loginBtn = document.querySelector(".btn__login");
 const signupBtn = document.querySelector(".btn__signup");
+const cancelBtn = document.querySelector(".btn__cancel");
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
 
 // other
 const dragAndDrop = document.querySelector(".bottom");
-const cancelBtn = document.querySelector(".btn__cancel");
 const overlay = document.querySelector(".overlay");
 
 /////////// VARIABLES
@@ -123,14 +123,17 @@ themeSwitchBtn.addEventListener("click", function () {
     theme.classList.toggle("theme-1");
     theme.classList.toggle("theme-2");
 });
+
+const logedInMessage = function (account) {
+    loginIcon.style.backgroundImage = "none";
+    loginIcon.style.alignSelf = "flex-end";
+    loginIcon.textContent = `Hello, ${account.user}`;
+};
 // open/close login modal
 document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
         closeModal();
     }
-});
-cancelBtn.addEventListener("click", function () {
-    closeModal(loginOverlay);
 });
 loginIcon.addEventListener("click", function () {
     openModal(loginOverlay);
@@ -182,13 +185,12 @@ loginBtn.addEventListener("click", function (e) {
 
     if (currentAccount?.password === inputPassword.value) {
         inputName.value = inputPassword.value = "";
-        closeModal();
+        closeModal(loginOverlay);
         updateUI(currentAccount);
-        loginIcon.style.backgroundImage = "none";
-        loginIcon.style.alignSelf = "flex-end";
-        loginIcon.textContent = `Hello, ${currentAccount.user}`;
+        logedInMessage(currentAccount);
     } else {
-        errorPopup("There is no such user, try to signup first");
+        errorPopup("🤷🏽 There is no such user, try signing up first.. ");
+        inputName.value = inputPassword.value = "";
     }
 });
 
@@ -208,11 +210,18 @@ signupBtn.addEventListener("click", function (e) {
         updateUI(currentAccount);
     }
 });
+cancelBtn.addEventListener("click", function () {
+    closeModal(loginOverlay);
+});
 
 // error popup
 const errorPopup = function (message) {
     openModal(errorCard);
     errorMessageEl.textContent = message;
+    const gotItBtn = document.querySelector(".btn__got-it");
+    gotItBtn.addEventListener("click", function () {
+        errorCard.close();
+    });
 };
 
 // filter tasks

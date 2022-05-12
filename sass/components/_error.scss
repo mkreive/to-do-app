@@ -2,7 +2,15 @@
     width: 30vw;
     background-color: var(--color-background);
     border-radius: 0.5rem;
-    padding: 4rem;
-    @include absCenter;
+    padding: 3rem;
     border: none;
+    top: 16%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+    &__message {
+        font-size: $font-size-text;
+        margin-bottom: $margin-bottom-small;
+    }
 }
