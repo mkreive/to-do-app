@@ -162,8 +162,7 @@ body {
   height: 10vh;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem; }
+  align-items: baseline; }
   .header__logo {
     color: var(--color-logo);
     text-transform: uppercase;
@@ -175,8 +174,8 @@ body {
     background-image: var(--theme-icon);
     background-repeat: no-repeat;
     background-position: center;
-    width: 5rem;
-    height: 5rem; }
+    min-width: 3rem;
+    min-height: 3rem; }
   .header__login {
     background-image: url("https://res.cloudinary.com/kreiva/image/upload/v1652166389/FrontendMentor/ToDoListApp/faciukas2_ioa2qu.png");
     background-repeat: no-repeat;
@@ -187,7 +186,7 @@ body {
     min-height: 3rem;
     color: var(--color-logo);
     font-size: 2rem;
-    margin-right: 1rem; }
+    margin-right: 1.5rem; }
     .header__login:hover {
       cursor: pointer; }
 

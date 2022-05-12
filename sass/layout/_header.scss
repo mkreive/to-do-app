@@ -4,8 +4,8 @@
 
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: $margin-bottom-big;
+    align-items: baseline;
+    // margin-bottom: $margin-bottom-small;
 
     &__logo {
         color: var(--color-logo);
@@ -20,8 +20,10 @@
         background-image: var(--theme-icon);
         background-repeat: no-repeat;
         background-position: center;
-        width: 5rem;
-        height: 5rem;
+        min-width: 3rem;
+        min-height: 3rem;
+        // width: 5rem;
+        // height: 5rem;
     }
 
     &__login {
@@ -35,7 +37,7 @@
         color: var(--color-logo);
         font-size: $font-size-text;
         // align-self: flex-end;
-        margin-right: 1rem;
+        margin-right: 1.5rem;
 
         &:hover {
             cursor: pointer;

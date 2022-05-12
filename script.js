@@ -24,10 +24,10 @@ const dummyLists = [
         },
     },
     {
-        user: "Dummy",
+        user: "Nobody",
         password: "",
         todo: {
-            do: [],
+            do: ["Login/Signup to add some tasks"],
             done: [],
         },
     },
@@ -98,23 +98,27 @@ const generateItemHtml = function (value, checkmarkCl, textCl) {
 };
 
 // display list
-const displayList = function (user) {
+const displayList = function (todoList, doneList) {
     listBlockEl.innerHTML = "";
     listItemCounterEl.textContent = "";
 
-    const todo = user.todo.do;
-    const done = user.todo.done;
+    const todo = todoList;
+    const done = doneList;
 
-    todo.forEach(function (work) {
-        const html = generateItemHtml(work, "", "");
-        listBlockEl.insertAdjacentHTML("beforeend", html);
-    });
-    done.forEach(function (work) {
-        const html = generateItemHtml(work, "checked", "crossed");
-        listBlockEl.insertAdjacentHTML("beforeend", html);
-    });
+    if (todo) {
+        todo.forEach(function (work) {
+            const html = generateItemHtml(work, "", "");
+            listBlockEl.insertAdjacentHTML("beforeend", html);
+        });
+        updateCounter(todo);
+    }
+    if (done) {
+        done.forEach(function (work) {
+            const html = generateItemHtml(work, "checked", "crossed");
+            listBlockEl.insertAdjacentHTML("beforeend", html);
+        });
+    }
 
-    updateCounter(todo);
     taskElementListener();
 };
 
@@ -150,14 +154,13 @@ const clearBtnClicked = function (account) {
 };
 // show active tasks button
 const showActiveTasks = function (account) {
-    const checkmarkNodes = document.querySelectorAll(".checkmark");
-    let checkmarks = Array.from(checkmarkNodes);
-
-    checkmarks.forEach((item) => {
-        if (item.classList.contains("checked")) {
-            item.parentNode.remove();
-        }
-    });
+    displayList(account.todo.do, "");
+};
+const showCompletedTasks = function (account) {
+    displayList("", account.todo.done);
+};
+const showAllTasks = function (account) {
+    displayList(account.todo.do, account.todo.done);
 };
 
 const updateCounter = function (list) {
@@ -166,13 +169,12 @@ const updateCounter = function (list) {
 
 // update UI
 const updateUI = function (user) {
-    displayList(user);
+    displayList(user.todo.do, user.todo.done);
 };
 
 // welcome message
 const logedInMessage = function (account) {
     loginIcon.style.backgroundImage = "none";
-    loginIcon.style.alignSelf = "flex-end";
     loginIcon.textContent = `Hello, ${account.user}`;
 };
 
@@ -294,10 +296,14 @@ footerBtns.forEach((btn) => {
         clickedBtn.classList.add("active");
 
         if (clickedBtn.classList.contains("btn-all")) {
+            showAllTasks(account);
+            prevClickedBtn = clickedBtn;
         } else if (clickedBtn.classList.contains("btn-active")) {
             showActiveTasks(account);
+            prevClickedBtn = clickedBtn;
         } else if (clickedBtn.classList.contains("btn-completed")) {
-            console.log("completed");
+            showCompletedTasks(account);
+            prevClickedBtn = clickedBtn;
         } else if (clickedBtn.classList.contains("btn-clear")) {
             clearBtnClicked(account);
             prevClickedBtn = clickedBtn;
@@ -310,7 +316,7 @@ footerBtns.forEach((btn) => {
 /////////// LOADING APP
 const appLoad = function () {
     window.addEventListener("load", function () {
-        currentAccount = dummyLists[0];
+        currentAccount = dummyLists[2];
         updateUI(currentAccount);
         logedInMessage(currentAccount);
     });
