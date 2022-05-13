@@ -77,9 +77,6 @@ const closeModal = function (modal) {
 const openModal = function (modal) {
     modal.showModal();
     overlay.classList.remove("hidden");
-    overlay.addEventListener("click", function () {
-        console.log("clicked");
-    });
 };
 // error popup
 const errorPopup = function (message) {
