@@ -3,7 +3,8 @@
 /////////// DUMMY DATA
 const dummyLists = [
     {
-        user: "Monika",
+        id: "u1",
+        name: "Monika",
         password: "monkey",
         todo: {
             do: [
@@ -16,7 +17,8 @@ const dummyLists = [
         },
     },
     {
-        user: "Jonas",
+        id: "u2",
+        name: "Jonas",
         password: "jonas",
         todo: {
             do: ["Finish project at work", "Buy apartment", "Read a book"],
@@ -24,7 +26,8 @@ const dummyLists = [
         },
     },
     {
-        user: "Nobody",
+        id: "u3",
+        name: "",
         password: "",
         todo: {
             do: ["Login/Signup to add some tasks"],
@@ -175,8 +178,10 @@ const updateUI = function (user) {
 
 // welcome message
 const logedInMessage = function (account) {
-    loginIcon.style.backgroundImage = "none";
-    loginIcon.textContent = `Hello, ${account.user}`;
+    if (account.user) {
+        loginIcon.style.backgroundImage = "none";
+        loginIcon.textContent = `Hello, ${account.user}`;
+    } else return;
 };
 
 /////////// EVENT LISTENERS
@@ -324,7 +329,9 @@ dragAndDrop.addEventListener(
 /////////// LOADING APP
 const appLoad = function () {
     window.addEventListener("load", function () {
-        currentAccount = dummyLists[2];
+        if (!currentAccount) {
+            currentAccount = dummyLists[2];
+        }
         updateUI(currentAccount);
         logedInMessage(currentAccount);
     });
