@@ -1,32 +1,9 @@
 "use strict";
 
 /////////// DUMMY DATA
-const dummyLists = [
+const dummyUser = [
     {
-        id: "u1",
-        name: "Monika",
-        password: "monkey",
-        todo: {
-            do: [
-                "Walk dogs to the forest",
-                "Do yoga",
-                "Play a board game with family",
-                "Read a book",
-            ],
-            done: ["Complete React online course", "Do dishes"],
-        },
-    },
-    {
-        id: "u2",
-        name: "Jonas",
-        password: "jonas",
-        todo: {
-            do: ["Finish project at work", "Buy apartment", "Read a book"],
-            done: ["Feed the fish"],
-        },
-    },
-    {
-        id: "u3",
+        id: "u0",
         name: "",
         password: "",
         todo: {
@@ -72,6 +49,30 @@ let currentAccount;
 let prevClickedBtn;
 
 /////////// HELPER FUNCTIONS
+// getting data
+const fetchUsers = async function (user, password) {
+    const response = await fetch(
+        "https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json"
+    );
+    const responseData = await response.json();
+    let userData = [];
+
+    for (const key in responseData) {
+        if (
+            responseData[key].name === user &&
+            responseData[key].password === password
+        ) {
+            userData.push(responseData[key]);
+            return userData;
+        } else if (
+            responseData[key].name != user ||
+            responseData[key].password != password
+        ) {
+            console.error("wrong password/username");
+        }
+    }
+};
+
 // modal
 const closeModal = function (modal) {
     modal.close();
@@ -245,16 +246,26 @@ const taskElementListener = function () {
 loginBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
-    currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
+    const nameInputValue = inputName.value.trim().toLowerCase();
+    const pswrdInputValue = inputPassword.value;
 
-    if (currentAccount?.password === inputPassword.value) {
-        inputName.value = inputPassword.value = "";
-        closeModal(loginOverlay);
-        updateUI(currentAccount);
-        logedInMessage(currentAccount);
-    } else {
-        errorPopup("🤷🏽 There is no such user, try signing up first.. ");
-        inputName.value = inputPassword.value = "";
+    if (nameInputValue && pswrdInputValue) {
+        const userData = fetchUsers(nameInputValue, pswrdInputValue);
+        const loggedInUser = userData;
+
+        console.log(loggedInUser);
+
+        if (userData) {
+            currentAccount = userData;
+            inputName.value = inputPassword.value = "";
+            closeModal(loginOverlay);
+            updateUI(currentAccount);
+            logedInMessage(currentAccount);
+        } else {
+            errorPopup("🤷🏽 There is no such user, try signing up first.. ");
+        }
+    } else if (!nameInputValue || !pswrdInputValue) {
+        errorPopup("Input fields should not be empty");
     }
 });
 
@@ -330,7 +341,7 @@ dragAndDrop.addEventListener(
 const appLoad = function () {
     window.addEventListener("load", function () {
         if (!currentAccount) {
-            currentAccount = dummyLists[2];
+            currentAccount = dummyUser;
         }
         updateUI(currentAccount);
         logedInMessage(currentAccount);
