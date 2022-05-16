@@ -164,7 +164,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 1rem; }
+  margin-bottom: 3rem; }
   .header__logo {
     color: var(--color-logo);
     text-transform: uppercase;

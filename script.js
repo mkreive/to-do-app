@@ -132,6 +132,7 @@ const displayList = function (todoList, doneList) {
 
 // manipulating list items
 const addNewTask = function (account, task) {
+    console.log(currentAccount);
     inputField.value = "";
     account.todo.do.push(task);
     updateUI(account);
@@ -177,7 +178,6 @@ const updateCounter = function (list) {
 
 // update UI
 const updateUI = function (user) {
-    console.log(user);
     const doList = user.do.split(",");
     const doneList = user.done.split(",");
     displayList(doList, doneList);
@@ -185,9 +185,9 @@ const updateUI = function (user) {
 
 // welcome message
 const logedInMessage = function (account) {
-    if (account.user) {
+    if (account.name) {
         loginIcon.style.backgroundImage = "none";
-        loginIcon.textContent = `Hello, ${account.user}`;
+        loginIcon.textContent = `Hello, ${account.name}`;
     } else return;
 };
 
@@ -211,14 +211,13 @@ loginIcon.addEventListener("click", function () {
 
 // entering new task
 inputField.addEventListener("keydown", function (e) {
-    const newItem = inputField.value;
-    if (e.key === "Enter" && inputField.value && currentAccount) {
+    const newItem = inputField.value.trim();
+    if (e.key === "Enter" && newItem && currentAccount) {
         addNewTask(currentAccount, newItem);
-    } else if (e.key === "Enter" && inputField.value && !currentAccount) {
-        [currentAccount] = dummyLists.filter((user) => user.user === "Dummy");
+    } else if (e.key === "Enter" && newItem && currentAccount.id == "u0") {
         addNewTask(currentAccount, newItem);
     } else if (e.key === "Enter" && !inputField.value) {
-        errorPopup("Input shouldn't be empty..");
+        errorPopup("Input should not be empty..");
     }
 });
 
