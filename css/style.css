@@ -61,6 +61,7 @@ $breakpoint arguement choices:
   transition: all 10ms ease-in-out; }
 
 .hidden {
+  display: noen;
   visibility: hidden;
   opacity: 0; }
 
@@ -287,6 +288,7 @@ body {
       cursor: pointer; }
 
 .login {
+  position: absolute;
   width: 30vw;
   background-color: var(--color-background);
   border-radius: 0.5rem;
@@ -294,7 +296,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: none; }
+  border: none;
+  z-index: 99; }
   .login__form-input {
     width: 100%;
     border: none;
@@ -333,11 +336,11 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-  z-index: 100;
+  z-index: 1;
   transition: all 0.5s; }
 
 .error {
-  z-index: 99;
+  z-index: 101;
   width: 30vw;
   background-color: var(--color-background);
   border-radius: 0.5rem;

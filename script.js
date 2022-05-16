@@ -6,10 +6,8 @@ const dummyUser = [
         id: "u0",
         name: "",
         password: "",
-        todo: {
-            do: ["Login/Signup to add some tasks"],
-            done: [],
-        },
+        do: "Login/Signup to add some tasks",
+        done: "Find ToDo app",
     },
 ];
 
@@ -54,6 +52,10 @@ const fetchUsers = async function (user, password) {
     const response = await fetch(
         "https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json"
     );
+    if (!response.ok) {
+        throw new Error("Something went wrong");
+    }
+
     const responseData = await response.json();
     let userData = [];
 
@@ -62,24 +64,25 @@ const fetchUsers = async function (user, password) {
             responseData[key].name === user &&
             responseData[key].password === password
         ) {
-            userData.push(responseData[key]);
-            return userData;
-        } else if (
-            responseData[key].name != user ||
-            responseData[key].password != password
-        ) {
-            console.error("wrong password/username");
+            userData.push({
+                id: key,
+                name: responseData[key].name,
+                password: responseData[key].password,
+                do: responseData[key].do,
+                done: responseData[key].done,
+            });
         }
     }
+    return userData;
 };
 
 // modal
 const closeModal = function (modal) {
-    modal.close();
+    modal.classList.add("hidden");
     overlay.classList.add("hidden");
 };
 const openModal = function (modal) {
-    modal.showModal();
+    modal.classList.remove("hidden");
     overlay.classList.remove("hidden");
 };
 // error popup
@@ -88,7 +91,7 @@ const errorPopup = function (message) {
     errorMessageEl.textContent = message;
     const gotItBtn = document.querySelector(".btn__got-it");
     gotItBtn.addEventListener("click", function () {
-        errorCard.close();
+        closeModal(errorCard);
     });
 };
 
@@ -174,7 +177,10 @@ const updateCounter = function (list) {
 
 // update UI
 const updateUI = function (user) {
-    displayList(user.todo.do, user.todo.done);
+    console.log(user);
+    const doList = user.do.split(",");
+    const doneList = user.done.split(",");
+    displayList(doList, doneList);
 };
 
 // welcome message
@@ -250,20 +256,19 @@ loginBtn.addEventListener("click", function (e) {
     const pswrdInputValue = inputPassword.value;
 
     if (nameInputValue && pswrdInputValue) {
-        const userData = fetchUsers(nameInputValue, pswrdInputValue);
-        const loggedInUser = userData;
-
-        console.log(loggedInUser);
-
-        if (userData) {
-            currentAccount = userData;
-            inputName.value = inputPassword.value = "";
-            closeModal(loginOverlay);
-            updateUI(currentAccount);
-            logedInMessage(currentAccount);
-        } else {
-            errorPopup("🤷🏽 There is no such user, try signing up first.. ");
-        }
+        fetchUsers(nameInputValue, pswrdInputValue).then(
+            function (userData) {
+                [currentAccount] = userData;
+                inputName.value = inputPassword.value = "";
+                closeModal(loginOverlay);
+                updateUI(currentAccount);
+                logedInMessage(currentAccount);
+            },
+            function (error) {
+                errorPopup("🤷🏽 There is no such user, try signing up first.. ");
+                throw new Error(`Error: ${error}`);
+            }
+        );
     } else if (!nameInputValue || !pswrdInputValue) {
         errorPopup("Input fields should not be empty");
     }
@@ -271,29 +276,38 @@ loginBtn.addEventListener("click", function (e) {
 
 signupBtn.addEventListener("click", function (e) {
     e.preventDefault();
-    currentAccount = dummyLists.find((acc) => acc.user === inputName.value);
 
-    if (
-        !currentAccount &&
-        inputName.value.trim().length > 4 &&
-        inputPassword.value.trim().length > 4
-    ) {
-        currentAccount = {
-            user: inputName.value.trim(),
-            password: inputPassword.value.trim(),
-            todo: { do: [], done: [] },
-        };
-        dummyLists.push(currentAccount);
+    const nameInputValue = inputName.value.trim().toLowerCase();
+    const pswrdInputValue = inputPassword.value;
 
-        inputName.value = inputPassword.value = "";
-        closeModal(loginOverlay);
-        updateUI(currentAccount);
-        logedInMessage(currentAccount);
-    } else {
-        errorPopup(
-            "Username/Password should be at least 5 characters long.. Try again! "
+    if (nameInputValue.length > 4 && pswrdInputValue > 4) {
+        fetchUsers(nameInputValue, pswrdInputValue).then(
+            function (userData) {
+                console.log(userData);
+                currentAccount = userData;
+                inputName.value = inputPassword.value = "";
+                closeModal(loginOverlay);
+                updateUI(currentAccount);
+                logedInMessage(currentAccount);
+
+                currentAccount = {
+                    user: inputName.value.trim(),
+                    password: inputPassword.value.trim(),
+                    todo: { do: [], done: [] },
+                };
+                dummyLists.push(currentAccount);
+            },
+            function (error) {
+                errorPopup("Username is taken, choose another one");
+                throw new Error(`Error: ${error}`);
+            }
         );
-        inputName.value = inputPassword.value = "";
+    } else if (
+        !nameInputValue ||
+        !pswrdInputValue ||
+        (nameInputValue.length < 4 && pswrdInputValue < 4)
+    ) {
+        errorPopup("Username/Password is to short..");
     }
 });
 cancelBtn.addEventListener("click", function () {
@@ -341,7 +355,7 @@ dragAndDrop.addEventListener(
 const appLoad = function () {
     window.addEventListener("load", function () {
         if (!currentAccount) {
-            currentAccount = dummyUser;
+            [currentAccount] = dummyUser;
         }
         updateUI(currentAccount);
         logedInMessage(currentAccount);
