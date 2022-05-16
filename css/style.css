@@ -340,13 +340,14 @@ body {
   transition: all 0.5s; }
 
 .error {
+  position: absolute;
   z-index: 101;
-  width: 30vw;
-  background-color: var(--color-background);
+  width: 26vw;
+  background-color: var(--color-footer);
   border-radius: 0.5rem;
   padding: 3rem;
   border: none;
-  top: 10%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;

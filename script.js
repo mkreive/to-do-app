@@ -110,8 +110,8 @@ const displayList = function (todoList, doneList) {
     listBlockEl.innerHTML = "";
     listItemCounterEl.textContent = "";
 
-    const todo = todoList;
-    const done = doneList;
+    const todo = todoList.split(",");
+    const done = doneList.split(",");
 
     if (todo) {
         todo.forEach(function (work) {
@@ -132,28 +132,30 @@ const displayList = function (todoList, doneList) {
 
 // manipulating list items
 const addNewTask = function (account, task) {
-    console.log(currentAccount);
+    const doList = account.do.split(",");
     inputField.value = "";
-    account.todo.do.push(task);
+    doList.push(task);
+    currentAccount.do = doList;
+    console.log(currentAccount);
     updateUI(account);
 };
 const crossOutTask = function (account, task) {
-    const newToDoList = account.todo.do.filter((item) => item != task);
-    account.todo.do = newToDoList;
-    account.todo.done.push(task);
+    const newToDoList = account.do.filter((item) => item != task);
+    account.do = newToDoList;
+    account.done.push(task);
     updateCounter(newToDoList);
 };
 const deleteTask = function (account, task) {
-    const newDoList = account.todo.do.filter((item) => item != task);
-    const newDoneList = account.todo.done.filter((item) => item != task);
-    account.todo.do = newDoList;
-    account.todo.done = newDoneList;
+    const newDoList = account.do.filter((item) => item != task);
+    const newDoneList = account.done.filter((item) => item != task);
+    account.do = newDoList;
+    account.done = newDoneList;
     updateCounter(newDoList);
 };
 
 // clear button
 const clearBtnClicked = function (account) {
-    const completedTasks = account.todo.done;
+    const completedTasks = account.done;
     if (completedTasks) {
         completedTasks.forEach((item) => {
             deleteTask(account, item);
@@ -163,13 +165,13 @@ const clearBtnClicked = function (account) {
 };
 // show active tasks button
 const showActiveTasks = function (account) {
-    displayList(account.todo.do, "");
+    displayList(account.do, "");
 };
 const showCompletedTasks = function (account) {
-    displayList("", account.todo.done);
+    displayList("", account.done);
 };
 const showAllTasks = function (account) {
-    displayList(account.todo.do, account.todo.done);
+    displayList(account.do, account.done);
 };
 
 const updateCounter = function (list) {
@@ -178,9 +180,7 @@ const updateCounter = function (list) {
 
 // update UI
 const updateUI = function (user) {
-    const doList = user.do.split(",");
-    const doneList = user.done.split(",");
-    displayList(doList, doneList);
+    displayList(user.do, user.done);
 };
 
 // welcome message
@@ -211,11 +211,12 @@ loginIcon.addEventListener("click", function () {
 
 // entering new task
 inputField.addEventListener("keydown", function (e) {
-    const newItem = inputField.value.trim();
-    if (e.key === "Enter" && newItem && currentAccount) {
-        addNewTask(currentAccount, newItem);
+    const newListItem = inputField.value.trim();
+
+    if (e.key === "Enter" && newListItem && currentAccount) {
+        addNewTask(currentAccount, newListItem);
     } else if (e.key === "Enter" && newItem && currentAccount.id == "u0") {
-        addNewTask(currentAccount, newItem);
+        addNewTask(currentAccount, newListItem);
     } else if (e.key === "Enter" && !inputField.value) {
         errorPopup("Input should not be empty..");
     }
@@ -255,19 +256,32 @@ loginBtn.addEventListener("click", function (e) {
     const pswrdInputValue = inputPassword.value;
 
     if (nameInputValue && pswrdInputValue) {
-        fetchUsers(nameInputValue, pswrdInputValue).then(
-            function (userData) {
-                [currentAccount] = userData;
-                inputName.value = inputPassword.value = "";
-                closeModal(loginOverlay);
-                updateUI(currentAccount);
-                logedInMessage(currentAccount);
-            },
-            function (error) {
-                errorPopup("🤷🏽 There is no such user, try signing up first.. ");
-                throw new Error(`Error: ${error}`);
-            }
-        );
+        try {
+            fetchUsers(nameInputValue, pswrdInputValue).then(
+                function (userData) {
+                    currentAccount = {
+                        id: userData[0].id,
+                        name: userData[0].name,
+                        do: userData[0].do,
+                        done: userData[0].done,
+                    };
+
+                    inputName.value = inputPassword.value = "";
+                    closeModal(loginOverlay);
+                    updateUI(currentAccount);
+                    logedInMessage(currentAccount);
+                    console.log(currentAccount);
+                },
+                function (error) {
+                    errorPopup(
+                        "🤷🏽 There is no such user, try signing up first.. "
+                    );
+                    throw new Error(`Error: ${error}`);
+                }
+            );
+        } catch (error) {
+            console.log(error.message);
+        }
     } else if (!nameInputValue || !pswrdInputValue) {
         errorPopup("Input fields should not be empty");
     }
