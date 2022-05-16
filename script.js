@@ -1,7 +1,7 @@
 "use strict";
 
 /////////// DUMMY DATA
-const dummyUser = [
+const anonymous = [
     {
         id: "u0",
         name: "",
@@ -50,30 +50,27 @@ let prevClickedBtn;
 // getting data
 const fetchUsers = async function (user, password) {
     const response = await fetch(
-        "https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json"
+        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22name%22&equalTo=%22${user}%22`
     );
     if (!response.ok) {
-        throw new Error("Something went wrong");
+        throw new Error("Failed to fetch user info");
     }
-
     const responseData = await response.json();
-    let userData = [];
 
     for (const key in responseData) {
         if (
             responseData[key].name === user &&
             responseData[key].password === password
         ) {
-            userData.push({
+            return {
                 id: key,
                 name: responseData[key].name,
-                password: responseData[key].password,
-                do: responseData[key].do,
-                done: responseData[key].done,
-            });
+                do: responseData[key].do.split(","),
+                done: responseData[key].done.split(","),
+            };
         }
     }
-    return userData;
+    return {};
 };
 
 // modal
@@ -249,7 +246,7 @@ const taskElementListener = function () {
 };
 
 // login/signup forms
-loginBtn.addEventListener("click", function (e) {
+loginBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
     const nameInputValue = inputName.value.trim().toLowerCase();
@@ -257,28 +254,14 @@ loginBtn.addEventListener("click", function (e) {
 
     if (nameInputValue && pswrdInputValue) {
         try {
-            fetchUsers(nameInputValue, pswrdInputValue).then(
-                function (userData) {
-                    currentAccount = {
-                        id: userData[0].id,
-                        name: userData[0].name,
-                        do: userData[0].do,
-                        done: userData[0].done,
-                    };
+            const userData = await fetchUsers(nameInputValue, pswrdInputValue);
+            currentAccount = userData;
+            // irasyti i local storage userData.userId
 
-                    inputName.value = inputPassword.value = "";
-                    closeModal(loginOverlay);
-                    updateUI(currentAccount);
-                    logedInMessage(currentAccount);
-                    console.log(currentAccount);
-                },
-                function (error) {
-                    errorPopup(
-                        "🤷🏽 There is no such user, try signing up first.. "
-                    );
-                    throw new Error(`Error: ${error}`);
-                }
-            );
+            inputName.value = inputPassword.value = "";
+            closeModal(loginOverlay);
+            updateUI(currentAccount);
+            logedInMessage(currentAccount);
         } catch (error) {
             console.log(error.message);
         }
@@ -367,8 +350,13 @@ dragAndDrop.addEventListener(
 /////////// LOADING APP
 const appLoad = function () {
     window.addEventListener("load", function () {
+        // 1. is localStorage pasiimti currentUI
+        // jeigu nera currentUser = anonymous
+        // jeigu yra, fetch user info page userId (fire base reikia pakurti .indexOn ant userId)
+        // toliau like dalykai
+        // loaderis
         if (!currentAccount) {
-            [currentAccount] = dummyUser;
+            [currentAccount] = anonymous;
         }
         updateUI(currentAccount);
         logedInMessage(currentAccount);
