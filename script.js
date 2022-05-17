@@ -47,30 +47,56 @@ let currentAccount;
 let prevClickedBtn;
 
 /////////// HELPER FUNCTIONS
-// getting data
-const fetchUsers = async function (user, password) {
+// getting data from firebase
+const fetchUser = async function (userCode) {
     const response = await fetch(
-        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22name%22&equalTo=%22${user}%22`
+        `https://console.firebase.google.com/project/to-do-list-app-10ca0/database/to-do-list-app-10ca0-default-rtdb/data/users/u1/${userCode}`
+    );
+    if (!response.ok) {
+        throw new Error("Failed to fetch user info");
+    }
+    const responseData = await response.json();
+    processFetchedData(responseData);
+};
+
+const fetchUserById = async function (id) {
+    const response = await fetch(
+        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users/${id}`
     );
     if (!response.ok) {
         throw new Error("Failed to fetch user info");
     }
     const responseData = await response.json();
 
-    for (const key in responseData) {
-        if (
-            responseData[key].name === user &&
-            responseData[key].password === password
-        ) {
+    processFetchedData(responseData);
+};
+
+const processFetchedData = function (response) {
+    for (const key in response) {
+        if (response[key].name_password === userCode) {
             return {
                 id: key,
-                name: responseData[key].name,
-                do: responseData[key].do.split(","),
-                done: responseData[key].done.split(","),
+                name: response[key].name,
+                do: response[key].do.split(";"),
+                done: response[key].done.split(";"),
             };
         }
     }
     return {};
+};
+
+// getting data from LocalStorage
+const getLocalStorage = function (key) {
+    const data = JSON.parse(localStorage.getItem(key));
+    return data;
+};
+const setLocalStorage = function (key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+};
+const removeLocalStorage = function (key, value) {
+    if (!key || !value) return;
+    const data = getLocalStorage(key);
+    if (data === value) window.localStorage.removeItem(key);
 };
 
 // modal
@@ -180,6 +206,11 @@ const updateUI = function (user) {
     displayList(user.do, user.done);
 };
 
+const updatePage = function (user) {
+    updateUI(user);
+    logedInMessage(user);
+};
+
 // welcome message
 const logedInMessage = function (account) {
     if (account.name) {
@@ -251,10 +282,11 @@ loginBtn.addEventListener("click", async function (e) {
 
     const nameInputValue = inputName.value.trim().toLowerCase();
     const pswrdInputValue = inputPassword.value;
+    const userCode = `${nameInputValue}_${inputPassword}`;
 
     if (nameInputValue && pswrdInputValue) {
         try {
-            const userData = await fetchUsers(nameInputValue, pswrdInputValue);
+            const userData = await fetchUser(userCode);
             currentAccount = userData;
             // irasyti i local storage userData.userId
 
@@ -350,16 +382,18 @@ dragAndDrop.addEventListener(
 /////////// LOADING APP
 const appLoad = function () {
     window.addEventListener("load", function () {
-        // 1. is localStorage pasiimti currentUI
-        // jeigu nera currentUser = anonymous
-        // jeigu yra, fetch user info page userId (fire base reikia pakurti .indexOn ant userId)
-        // toliau like dalykai
-        // loaderis
-        if (!currentAccount) {
-            [currentAccount] = anonymous;
+        const localStorage = getLocalStorage();
+        if (!localStorage) {
+            currentAccount = anonymous;
+        } else if (localStorage) {
+            const userId = getLocalStorage(id);
+            fetchUserById(id);
         }
-        updateUI(currentAccount);
-        logedInMessage(currentAccount);
+
+        // jeigu yra, fetch user info page userId (fire base reikia pakurti .indexOn ant userId)
+
+        // loaderis
+        updatePage(currentAccount);
     });
 };
 appLoad();
