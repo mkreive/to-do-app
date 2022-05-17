@@ -343,7 +343,7 @@ body {
   position: absolute;
   z-index: 101;
   width: 26vw;
-  background-color: var(--color-footer);
+  background-color: #3a7bfd;
   border-radius: 0.5rem;
   padding: 3rem;
   border: none;

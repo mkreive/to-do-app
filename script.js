@@ -33,6 +33,7 @@ const signupBtn = document.querySelector(".btn__signup");
 const cancelBtn = document.querySelector(".btn__cancel");
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
+const loginSignupBtns = document.querySelectorAll(".account__btns");
 
 // footer buttons
 const footerBtns = document.querySelectorAll(".footer__text");
@@ -48,15 +49,27 @@ let prevClickedBtn;
 
 /////////// HELPER FUNCTIONS
 // getting data from firebase
-const fetchUser = async function (userCode) {
+const fetchUserData = async function (userCode) {
     const response = await fetch(
-        `https://console.firebase.google.com/project/to-do-list-app-10ca0/database/to-do-list-app-10ca0-default-rtdb/data/users/u1/${userCode}`
+        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22name_password%22&equalTo=%22${userCode}%22`
     );
     if (!response.ok) {
         throw new Error("Failed to fetch user info");
     }
+
     const responseData = await response.json();
-    processFetchedData(responseData);
+
+    for (const key in responseData) {
+        if (responseData[key].name_password === userCode) {
+            return {
+                id: key,
+                name: responseData[key].name,
+                do: responseData[key].do.split(";"),
+                done: responseData[key].done.split(";"),
+            };
+        }
+    }
+    return {};
 };
 
 const fetchUserById = async function (id) {
@@ -67,18 +80,13 @@ const fetchUserById = async function (id) {
         throw new Error("Failed to fetch user info");
     }
     const responseData = await response.json();
-
-    processFetchedData(responseData);
-};
-
-const processFetchedData = function (response) {
-    for (const key in response) {
-        if (response[key].name_password === userCode) {
+    for (const key in responseData) {
+        if (responseData[key].name_password === userCode) {
             return {
                 id: key,
-                name: response[key].name,
-                do: response[key].do.split(";"),
-                done: response[key].done.split(";"),
+                name: responseData[key].name,
+                do: responseData[key].do.split(";"),
+                done: responseData[key].done.split(";"),
             };
         }
     }
@@ -133,8 +141,8 @@ const displayList = function (todoList, doneList) {
     listBlockEl.innerHTML = "";
     listItemCounterEl.textContent = "";
 
-    const todo = todoList.split(",");
-    const done = doneList.split(",");
+    const todo = todoList;
+    const done = doneList;
 
     if (todo) {
         todo.forEach(function (work) {
@@ -235,6 +243,7 @@ document.addEventListener("keydown", function (e) {
 });
 loginIcon.addEventListener("click", function () {
     openModal(loginOverlay);
+    inputName.focus();
 });
 
 // entering new task
@@ -277,70 +286,50 @@ const taskElementListener = function () {
 };
 
 // login/signup forms
-loginBtn.addEventListener("click", async function (e) {
-    e.preventDefault();
+loginSignupBtns.forEach((btn) => {
+    btn.addEventListener("click", async function (e) {
+        e.preventDefault();
 
-    const nameInputValue = inputName.value.trim().toLowerCase();
-    const pswrdInputValue = inputPassword.value;
-    const userCode = `${nameInputValue}_${inputPassword}`;
+        const nameInputValue = inputName.value.trim();
+        const pswrdInputValue = inputPassword.value;
+        const uniqueUserCode = `${nameInputValue}_${pswrdInputValue}`;
 
-    if (nameInputValue && pswrdInputValue) {
-        try {
-            const userData = await fetchUser(userCode);
-            currentAccount = userData;
-            // irasyti i local storage userData.userId
+        if (nameInputValue && pswrdInputValue) {
+            try {
+                const userData = await fetchUserData(uniqueUserCode);
+                currentAccount = userData;
+            } catch (error) {
+                console.error(error);
+            }
 
+            if (
+                btn.classList.contains("btn__login") &&
+                Object.keys(currentAccount).length === 0
+            ) {
+                errorPopup("There is no such account, please SignUp first");
+            } else if (
+                btn.classList.contains(
+                    "btn__signup" && Object.keys(currentAccount).length > 0
+                )
+            ) {
+                errorPopup(
+                    "There is an account with this name. Try to log in, or use different name"
+                );
+            }
+
+            console.log(currentAccount);
+            setLocalStorage("userId", currentAccount.id);
             inputName.value = inputPassword.value = "";
             closeModal(loginOverlay);
-            updateUI(currentAccount);
-            logedInMessage(currentAccount);
-        } catch (error) {
-            console.log(error.message);
+            updatePage(currentAccount);
+        } else if (
+            !nameInputValue ||
+            !pswrdInputValue ||
+            !btn.classList.contains("btn__cancel")
+        ) {
+            errorPopup("Input fields should not be empty");
         }
-    } else if (!nameInputValue || !pswrdInputValue) {
-        errorPopup("Input fields should not be empty");
-    }
-});
-
-signupBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const nameInputValue = inputName.value.trim().toLowerCase();
-    const pswrdInputValue = inputPassword.value;
-
-    if (nameInputValue.length > 4 && pswrdInputValue > 4) {
-        fetchUsers(nameInputValue, pswrdInputValue).then(
-            function (userData) {
-                console.log(userData);
-                currentAccount = userData;
-                inputName.value = inputPassword.value = "";
-                closeModal(loginOverlay);
-                updateUI(currentAccount);
-                logedInMessage(currentAccount);
-
-                currentAccount = {
-                    user: inputName.value.trim(),
-                    password: inputPassword.value.trim(),
-                    todo: { do: [], done: [] },
-                };
-                dummyLists.push(currentAccount);
-            },
-            function (error) {
-                errorPopup("Username is taken, choose another one");
-                throw new Error(`Error: ${error}`);
-            }
-        );
-    } else if (
-        !nameInputValue ||
-        !pswrdInputValue ||
-        (nameInputValue.length < 4 && pswrdInputValue < 4)
-    ) {
-        errorPopup("Username/Password is to short..");
-    }
-});
-cancelBtn.addEventListener("click", function () {
-    inputName.value = inputPassword.value = "";
-    closeModal(loginOverlay);
+    });
 });
 
 // footer buttons
@@ -387,12 +376,11 @@ const appLoad = function () {
             currentAccount = anonymous;
         } else if (localStorage) {
             const userId = getLocalStorage(id);
-            fetchUserById(id);
+            currentAccount = fetchUserById(userId);
+            // jeigu yra, fetch user info page userId (fire base reikia pakurti .indexOn ant userId)
         }
 
-        // jeigu yra, fetch user info page userId (fire base reikia pakurti .indexOn ant userId)
-
-        // loaderis
+        // loaderi yterpti!
         updatePage(currentAccount);
     });
 };
