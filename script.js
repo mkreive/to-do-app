@@ -4,10 +4,10 @@
 const anonymous = [
     {
         id: "u0",
-        name: "",
+        name: "anonymous",
         password: "",
-        do: "Login/Signup to add some tasks",
-        done: "Find ToDo app",
+        do: ["Login/Signup to add some tasks"],
+        done: ["Find ToDo app"],
     },
 ];
 
@@ -28,12 +28,10 @@ const listItemCounterEl = document.querySelector(".items-left");
 // login/signup
 const loginOverlay = document.querySelector(".login");
 const loginIcon = document.querySelector(".header__login");
-const loginBtn = document.querySelector(".btn__login");
-const signupBtn = document.querySelector(".btn__signup");
-const cancelBtn = document.querySelector(".btn__cancel");
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
 const loginSignupBtns = document.querySelectorAll(".account__btns");
+const logoutOverlay = document.querySelector(".logout");
 
 // footer buttons
 const footerBtns = document.querySelectorAll(".footer__text");
@@ -49,46 +47,21 @@ let prevClickedBtn;
 
 /////////// HELPER FUNCTIONS
 // getting data from firebase
-const fetchUserData = async function (userCode) {
-    const response = await fetch(
-        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22name_password%22&equalTo=%22${userCode}%22`
-    );
+const fetchUserData = async function (address) {
+    const response = await fetch(address);
+    const responseData = await response.json();
+
     if (!response.ok) {
         throw new Error("Failed to fetch user info");
     }
 
-    const responseData = await response.json();
-
     for (const key in responseData) {
-        if (responseData[key].name_password === userCode) {
-            return {
-                id: key,
-                name: responseData[key].name,
-                do: responseData[key].do.split(";"),
-                done: responseData[key].done.split(";"),
-            };
-        }
-    }
-    return {};
-};
-
-const fetchUserById = async function (id) {
-    const response = await fetch(
-        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users/${id}`
-    );
-    if (!response.ok) {
-        throw new Error("Failed to fetch user info");
-    }
-    const responseData = await response.json();
-    for (const key in responseData) {
-        if (responseData[key].name_password === userCode) {
-            return {
-                id: key,
-                name: responseData[key].name,
-                do: responseData[key].do.split(";"),
-                done: responseData[key].done.split(";"),
-            };
-        }
+        return {
+            id: key,
+            name: responseData[key].name,
+            do: responseData[key].do.split(";"),
+            done: responseData[key].done.split(";"),
+        };
     }
     return {};
 };
@@ -158,14 +131,14 @@ const displayList = function (todoList, doneList) {
     const done = doneList;
 
     if (todo) {
-        todo.forEach(function (work) {
+        todo.forEach((work) => {
             const html = generateItemHtml(work, "", "");
             listBlockEl.insertAdjacentHTML("beforeend", html);
         });
         updateCounter(todo);
     }
     if (done) {
-        done.forEach(function (work) {
+        done.forEach((work) => {
             const html = generateItemHtml(work, "checked", "crossed");
             listBlockEl.insertAdjacentHTML("beforeend", html);
         });
@@ -176,7 +149,7 @@ const displayList = function (todoList, doneList) {
 
 // manipulating list items
 const addNewTask = function (account, task) {
-    const doList = account.do.split(",");
+    const doList = account.do;
     inputField.value = "";
     doList.push(task);
     currentAccount.do = doList;
@@ -229,10 +202,9 @@ const updateUI = function (user) {
 
 // welcome message
 const logedInMessage = function (user) {
-    console.log(user, "from logged in info");
     if (user.name) {
         loginIcon.style.backgroundImage = "none";
-        loginIcon.textContent = `Hello, ${account.name}`;
+        loginIcon.textContent = `Hello, ${user.name}`;
     } else return;
 };
 const updatePage = function (user) {
@@ -255,8 +227,12 @@ document.addEventListener("keydown", function (e) {
     }
 });
 loginIcon.addEventListener("click", function () {
-    openModal(loginOverlay);
-    inputName.focus();
+    if (currentAccount.name === "anonymous") {
+        openModal(loginOverlay);
+        inputName.focus();
+    } else {
+        openModal(logoutOverlay);
+    }
 });
 
 // entering new task
@@ -309,7 +285,8 @@ loginSignupBtns.forEach((btn) => {
 
         if (nameInputValue && pswrdInputValue) {
             try {
-                const userData = await fetchUserData(uniqueUserCode);
+                const fetchAddress = `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22name_password%22&equalTo=%22${uniqueUserCode}%22`;
+                const userData = await fetchUserData(fetchAddress);
                 currentAccount = userData;
             } catch (error) {
                 console.error(error);
@@ -335,7 +312,7 @@ loginSignupBtns.forEach((btn) => {
                 }
             }
 
-            // setLocalStorage("userId", currentAccount.id);
+            setLocalStorage("userId", currentAccount.id);
             inputName.value = inputPassword.value = "";
             closeModal(loginOverlay);
             updatePage(currentAccount);
@@ -383,18 +360,22 @@ dragAndDrop.addEventListener(
 
 /////////// LOADING APP
 const appLoad = function () {
-    window.addEventListener("load", function () {
-        const localStorage = getLocalStorage();
-        if (!localStorage) {
-            currentAccount = anonymous;
-        } else if (localStorage) {
-            const userId = getLocalStorage(id);
-            currentAccount = fetchUserById(userId);
-            // jeigu yra, fetch user info page userId (fire base reikia pakurti .indexOn ant userId)
+    window.addEventListener("load", async function () {
+        const loggedUserId = getLocalStorage("userId");
+        if (!loggedUserId) {
+            [currentAccount] = anonymous;
+        } else if (loggedUserId) {
+            try {
+                const fetchAddress = `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22code%22&equalTo=%22${loggedUserId}%22`;
+                const userData = await fetchUserData(fetchAddress);
+                currentAccount = userData;
+            } catch (error) {
+                console.error(error);
+            }
         }
 
         // loaderi yterpti!
-        // updatePage(currentAccount);
+        updatePage(currentAccount);
     });
 };
 appLoad();

@@ -163,7 +163,7 @@ body {
   height: 10vh;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-end;
   margin-bottom: 3rem; }
   .header__logo {
     color: var(--color-logo);

@@ -4,7 +4,7 @@
 
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: flex-end;
     margin-bottom: $margin-bottom-big;
 
     &__logo {
