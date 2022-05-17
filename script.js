@@ -93,6 +93,19 @@ const fetchUserById = async function (id) {
     return {};
 };
 
+// creating new account
+const createAccount = function (name, password) {
+    const newAccount = {
+        name: name,
+        password: password,
+        name_password: `${name}_${password}`,
+        id: `u${Math.floor(Math.random() * 100)}`,
+        do: {},
+        done: {},
+    };
+    return newAccount;
+};
+
 // getting data from LocalStorage
 const getLocalStorage = function (key) {
     const data = JSON.parse(localStorage.getItem(key));
@@ -214,17 +227,17 @@ const updateUI = function (user) {
     displayList(user.do, user.done);
 };
 
-const updatePage = function (user) {
-    updateUI(user);
-    logedInMessage(user);
-};
-
 // welcome message
-const logedInMessage = function (account) {
-    if (account.name) {
+const logedInMessage = function (user) {
+    console.log(user, "from logged in info");
+    if (user.name) {
         loginIcon.style.backgroundImage = "none";
         loginIcon.textContent = `Hello, ${account.name}`;
     } else return;
+};
+const updatePage = function (user) {
+    updateUI(user);
+    logedInMessage(user);
 };
 
 /////////// EVENT LISTENERS
@@ -307,26 +320,26 @@ loginSignupBtns.forEach((btn) => {
                 Object.keys(currentAccount).length === 0
             ) {
                 errorPopup("There is no such account, please SignUp first");
-            } else if (
-                btn.classList.contains(
-                    "btn__signup" && Object.keys(currentAccount).length > 0
-                )
-            ) {
-                errorPopup(
-                    "There is an account with this name. Try to log in, or use different name"
-                );
+                return;
+            } else if (btn.classList.contains("btn__signup")) {
+                if (Object.keys(currentAccount).length > 0) {
+                    errorPopup(
+                        "There is an account with this name. Try to log in, or use different name"
+                    );
+                    return;
+                } else {
+                    currentAccount = createAccount(
+                        nameInputValue,
+                        pswrdInputValue
+                    );
+                }
             }
 
-            console.log(currentAccount);
-            setLocalStorage("userId", currentAccount.id);
+            // setLocalStorage("userId", currentAccount.id);
             inputName.value = inputPassword.value = "";
             closeModal(loginOverlay);
             updatePage(currentAccount);
-        } else if (
-            !nameInputValue ||
-            !pswrdInputValue ||
-            !btn.classList.contains("btn__cancel")
-        ) {
+        } else if (!nameInputValue || !pswrdInputValue) {
             errorPopup("Input fields should not be empty");
         }
     });
@@ -381,7 +394,7 @@ const appLoad = function () {
         }
 
         // loaderi yterpti!
-        updatePage(currentAccount);
+        // updatePage(currentAccount);
     });
 };
 appLoad();
