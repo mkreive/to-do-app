@@ -60,7 +60,7 @@ const fetchUserData = async function (address) {
 
     for (const key in responseData) {
         return {
-            id: responseData[key].code,
+            id: key,
             name: responseData[key].name,
             do: responseData[key].do.split(";"),
             done: responseData[key].done.split(";"),
@@ -84,15 +84,23 @@ const removeLocalStorage = function (key, value) {
 };
 
 // creating new account
-const createAccount = function (name, password) {
-    const newAccount = {
-        name: name,
-        password: password,
-        name_password: `${name}_${password}`,
-        id: `u${Math.floor(Math.random() * 100)}`,
-        do: {},
-        done: {},
-    };
+const createAccount = async function (name, password) {
+    const request = await fetch(
+        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users/.json`,
+        {
+            method: "POST",
+            body: JSON.stringify({
+                name: name,
+                password: password,
+                name_password: `${name}_${password}`,
+                do: "",
+                done: "",
+            }),
+        }
+    );
+    const responseData = await request.json();
+
+    console.log(responseData);
     return newAccount;
 };
 
@@ -413,7 +421,7 @@ const appLoad = function () {
             [currentAccount] = anonymous;
         } else if (loggedUserId) {
             try {
-                const fetchAddress = `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22code%22&equalTo=%22${loggedUserId}%22`;
+                const fetchAddress = `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22id%22&equalTo=%22${loggedUserId}%22`;
                 const userData = await fetchUserData(fetchAddress);
                 currentAccount = userData;
             } catch (error) {
