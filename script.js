@@ -43,7 +43,6 @@ const dragBtn = document.querySelector(".dragAndDrop");
 
 /////////// VARIABLES
 let currentAccount;
-let prevClickedBtn;
 
 /////////// HELPER FUNCTIONS
 // getting data from firebase
@@ -57,26 +56,13 @@ const fetchUserData = async function (address) {
 
     for (const key in responseData) {
         return {
-            id: key,
+            id: responseData[key].code,
             name: responseData[key].name,
             do: responseData[key].do.split(";"),
             done: responseData[key].done.split(";"),
         };
     }
     return {};
-};
-
-// creating new account
-const createAccount = function (name, password) {
-    const newAccount = {
-        name: name,
-        password: password,
-        name_password: `${name}_${password}`,
-        id: `u${Math.floor(Math.random() * 100)}`,
-        do: {},
-        done: {},
-    };
-    return newAccount;
 };
 
 // getting data from LocalStorage
@@ -93,7 +79,28 @@ const removeLocalStorage = function (key, value) {
     if (data === value) window.localStorage.removeItem(key);
 };
 
-// modal
+// creating new account
+const createAccount = function (name, password) {
+    const newAccount = {
+        name: name,
+        password: password,
+        name_password: `${name}_${password}`,
+        id: `u${Math.floor(Math.random() * 100)}`,
+        do: {},
+        done: {},
+    };
+    return newAccount;
+};
+
+// welcome message
+const logedInMessage = function (user) {
+    if (user.name) {
+        loginIcon.style.backgroundImage = "none";
+        loginIcon.textContent = `Hello, ${user.name}`;
+    } else return;
+};
+
+// open/close modals
 const closeModal = function (modal) {
     modal.classList.add("hidden");
     overlay.classList.add("hidden");
@@ -191,21 +198,12 @@ const showAllTasks = function (account) {
     displayList(account.do, account.done);
 };
 
-const updateCounter = function (list) {
-    listItemCounterEl.textContent = `${list.length} items left`;
-};
-
 // update UI
 const updateUI = function (user) {
     displayList(user.do, user.done);
 };
-
-// welcome message
-const logedInMessage = function (user) {
-    if (user.name) {
-        loginIcon.style.backgroundImage = "none";
-        loginIcon.textContent = `Hello, ${user.name}`;
-    } else return;
+const updateCounter = function (list) {
+    listItemCounterEl.textContent = `${list.length} items left`;
 };
 const updatePage = function (user) {
     updateUI(user);
@@ -226,53 +224,15 @@ document.addEventListener("keydown", function (e) {
         closeModal(errorCard);
     }
 });
+
 loginIcon.addEventListener("click", function () {
     if (currentAccount.name === "anonymous") {
         openModal(loginOverlay);
         inputName.focus();
     } else {
-        openModal(logoutOverlay);
+        openModal(logOut);
     }
 });
-
-// entering new task
-inputField.addEventListener("keydown", function (e) {
-    const newListItem = inputField.value.trim();
-
-    if (e.key === "Enter" && newListItem && currentAccount) {
-        addNewTask(currentAccount, newListItem);
-    } else if (e.key === "Enter" && newItem && currentAccount.id == "u0") {
-        addNewTask(currentAccount, newListItem);
-    } else if (e.key === "Enter" && !inputField.value) {
-        errorPopup("Input should not be empty..");
-    }
-});
-
-// manipulating with list items
-const taskElementListener = function () {
-    const listItems = document.querySelectorAll(".card__item");
-
-    listItems.forEach((item) =>
-        item.addEventListener("click", function (e) {
-            const taskClicked = e.target;
-
-            if (taskClicked.classList.contains("checkmark")) {
-                taskClicked.classList.add("checked");
-                const checkedItem = taskClicked.nextElementSibling;
-                checkedItem.classList.add("crossed");
-
-                if (currentAccount) {
-                    crossOutTask(currentAccount, checkedItem.textContent);
-                }
-            } else if (taskClicked.classList.contains("btn__exit")) {
-                taskClicked.parentElement.remove();
-                const removedItem =
-                    taskClicked.previousElementSibling.textContent;
-                deleteTask(currentAccount, removedItem);
-            }
-        })
-    );
-};
 
 // login/signup forms
 loginSignupBtns.forEach((btn) => {
@@ -321,6 +281,45 @@ loginSignupBtns.forEach((btn) => {
         }
     });
 });
+
+// entering new task
+inputField.addEventListener("keydown", function (e) {
+    const newListItem = inputField.value.trim();
+
+    if (e.key === "Enter" && newListItem && currentAccount) {
+        addNewTask(currentAccount, newListItem);
+    } else if (e.key === "Enter" && newItem && currentAccount.id == "u0") {
+        addNewTask(currentAccount, newListItem);
+    } else if (e.key === "Enter" && !inputField.value) {
+        errorPopup("Input should not be empty..");
+    }
+});
+
+// manipulating with list items
+const taskElementListener = function () {
+    const listItems = document.querySelectorAll(".card__item");
+
+    listItems.forEach((item) =>
+        item.addEventListener("click", function (e) {
+            const taskClicked = e.target;
+
+            if (taskClicked.classList.contains("checkmark")) {
+                taskClicked.classList.add("checked");
+                const checkedItem = taskClicked.nextElementSibling;
+                checkedItem.classList.add("crossed");
+
+                if (currentAccount) {
+                    crossOutTask(currentAccount, checkedItem.textContent);
+                }
+            } else if (taskClicked.classList.contains("btn__exit")) {
+                taskClicked.parentElement.remove();
+                const removedItem =
+                    taskClicked.previousElementSibling.textContent;
+                deleteTask(currentAccount, removedItem);
+            }
+        })
+    );
+};
 
 // footer buttons
 footerBtns.forEach((btn) => {
