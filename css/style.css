@@ -270,7 +270,7 @@ body {
   text-transform: uppercase;
   border: none;
   cursor: pointer; }
-  .btn__signup, .btn__login {
+  .btn__signup, .btn__login, .btn__logout {
     background-color: #c058f3; }
   .btn__cancel {
     background-color: var(--color-text); }
@@ -327,6 +327,19 @@ body {
   .login__link {
     color: var(--color-text);
     text-decoration: none; }
+
+.logout {
+  position: absolute;
+  width: 15vw;
+  background-color: var(--color-background);
+  border-radius: 0.5rem;
+  padding: 4rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  z-index: 99;
+  text-align: center; }
 
 .overlay {
   position: fixed;

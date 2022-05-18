@@ -25,13 +25,15 @@ const inputField = document.querySelector(".text__input");
 const listBlockEl = document.querySelector(".card__list-items");
 const listItemCounterEl = document.querySelector(".items-left");
 
-// login/signup
+// login/signup/logout
 const loginOverlay = document.querySelector(".login");
 const loginIcon = document.querySelector(".header__login");
 const inputName = document.getElementById("name");
 const inputPassword = document.getElementById("password");
 const loginSignupBtns = document.querySelectorAll(".account__btns");
 const logoutOverlay = document.querySelector(".logout");
+const cancelBtn = document.querySelectorAll(".btn__cancel");
+const logoutBtn = document.querySelectorAll(".btn__logout");
 
 // footer buttons
 const footerBtns = document.querySelectorAll(".footer__text");
@@ -43,6 +45,7 @@ const dragBtn = document.querySelector(".dragAndDrop");
 
 /////////// VARIABLES
 let currentAccount;
+let openedModal;
 
 /////////// HELPER FUNCTIONS
 // getting data from firebase
@@ -92,6 +95,11 @@ const createAccount = function (name, password) {
     return newAccount;
 };
 
+const logoutCurrentAcc = function (account) {
+    removeLocalStorage("userId", account.code);
+    appLoad();
+};
+
 // welcome message
 const logedInMessage = function (user) {
     if (user.name) {
@@ -104,19 +112,18 @@ const logedInMessage = function (user) {
 const closeModal = function (modal) {
     modal.classList.add("hidden");
     overlay.classList.add("hidden");
+    openedModal = "";
 };
 const openModal = function (modal) {
     modal.classList.remove("hidden");
     overlay.classList.remove("hidden");
+    openedModal = modal;
 };
 // error popup
 const errorPopup = function (message) {
     openModal(errorCard);
     errorMessageEl.textContent = message;
-    const gotItBtn = document.querySelector(".btn__got-it");
-    gotItBtn.addEventListener("click", function () {
-        closeModal(errorCard);
-    });
+    openedModal = errorCard;
 };
 
 // generate list item HTML
@@ -220,17 +227,18 @@ themeSwitchBtn.addEventListener("click", function () {
 // open/close login modal
 document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
-        closeModal(loginOverlay);
-        closeModal(errorCard);
+        closeModal(openedModal);
     }
 });
 
 loginIcon.addEventListener("click", function () {
     if (currentAccount.name === "anonymous") {
         openModal(loginOverlay);
+        openedModal = loginOverlay;
         inputName.focus();
     } else {
-        openModal(logOut);
+        openModal(logoutOverlay);
+        openedModal = logoutOverlay;
     }
 });
 
@@ -275,11 +283,24 @@ loginSignupBtns.forEach((btn) => {
             setLocalStorage("userId", currentAccount.id);
             inputName.value = inputPassword.value = "";
             closeModal(loginOverlay);
+            openedModal = "";
             updatePage(currentAccount);
         } else if (!nameInputValue || !pswrdInputValue) {
             errorPopup("Input fields should not be empty");
         }
     });
+});
+// cancel buttons
+cancelBtn.forEach((btn) =>
+    btn.addEventListener("click", function () {
+        closeModal(openedModal);
+    })
+);
+// logout
+logoutBtn.addEventListener("click", function () {
+    logoutCurrentAcc(currentAccount);
+    closeModal(logoutOverlay);
+    openedModal = "";
 });
 
 // entering new task

@@ -12,7 +12,8 @@
     cursor: pointer;
 
     &__signup,
-    &__login {
+    &__login,
+    &__logout {
         background-color: $color-main-purple;
     }
 
