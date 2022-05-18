@@ -33,7 +33,7 @@ const inputPassword = document.getElementById("password");
 const loginSignupBtns = document.querySelectorAll(".account__btns");
 const logoutOverlay = document.querySelector(".logout");
 const cancelBtn = document.querySelectorAll(".btn__cancel");
-const logoutBtn = document.querySelectorAll(".btn__logout");
+const logoutBtn = document.querySelector(".btn__logout");
 
 // footer buttons
 const footerBtns = document.querySelectorAll(".footer__text");
@@ -46,6 +46,7 @@ const dragBtn = document.querySelector(".dragAndDrop");
 /////////// VARIABLES
 let currentAccount;
 let openedModal;
+let prevClickedBtn;
 
 /////////// HELPER FUNCTIONS
 // getting data from firebase
@@ -96,12 +97,15 @@ const createAccount = function (name, password) {
 };
 
 const logoutCurrentAcc = function (account) {
-    removeLocalStorage("userId", account.code);
+    removeLocalStorage("userId", account.id);
     appLoad();
 };
 
 // welcome message
 const logedInMessage = function (user) {
+    if (user.name === "anonymous") {
+        return;
+    }
     if (user.name) {
         loginIcon.style.backgroundImage = "none";
         loginIcon.textContent = `Hello, ${user.name}`;
@@ -123,7 +127,6 @@ const openModal = function (modal) {
 const errorPopup = function (message) {
     openModal(errorCard);
     errorMessageEl.textContent = message;
-    openedModal = errorCard;
 };
 
 // generate list item HTML
@@ -234,11 +237,9 @@ document.addEventListener("keydown", function (e) {
 loginIcon.addEventListener("click", function () {
     if (currentAccount.name === "anonymous") {
         openModal(loginOverlay);
-        openedModal = loginOverlay;
         inputName.focus();
     } else {
         openModal(logoutOverlay);
-        openedModal = logoutOverlay;
     }
 });
 
@@ -279,11 +280,10 @@ loginSignupBtns.forEach((btn) => {
                     );
                 }
             }
-
+            console.log(currentAccount);
             setLocalStorage("userId", currentAccount.id);
             inputName.value = inputPassword.value = "";
             closeModal(loginOverlay);
-            openedModal = "";
             updatePage(currentAccount);
         } else if (!nameInputValue || !pswrdInputValue) {
             errorPopup("Input fields should not be empty");
@@ -292,15 +292,16 @@ loginSignupBtns.forEach((btn) => {
 });
 // cancel buttons
 cancelBtn.forEach((btn) =>
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", function (e) {
+        e.preventDefault();
         closeModal(openedModal);
     })
 );
 // logout
-logoutBtn.addEventListener("click", function () {
+logoutBtn.addEventListener("click", function (e) {
+    // e.preventDefault();
     logoutCurrentAcc(currentAccount);
     closeModal(logoutOverlay);
-    openedModal = "";
 });
 
 // entering new task
