@@ -156,8 +156,10 @@ const displayList = function (todoList, doneList) {
     }
     if (done) {
         done.forEach((work) => {
-            const html = generateItemHtml(work, "checked", "crossed");
-            listBlockEl.insertAdjacentHTML("beforeend", html);
+            if (work) {
+                const html = generateItemHtml(work, "checked", "crossed");
+                listBlockEl.insertAdjacentHTML("beforeend", html);
+            }
         });
     }
 
@@ -170,6 +172,15 @@ const sendNewDoList = async function (account) {
         {
             method: "PATCH",
             body: JSON.stringify({ do: account.do.join(";") }),
+        }
+    );
+};
+const sendNewDoneList = async function (account) {
+    fetch(
+        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users/${account.id}/.json`,
+        {
+            method: "PATCH",
+            body: JSON.stringify({ done: account.done.join(";") }),
         }
     );
 };
@@ -186,13 +197,21 @@ const crossOutTask = function (account, task) {
     const newToDoList = account.do.filter((item) => item != task);
     account.do = newToDoList;
     account.done.push(task);
+
+    sendNewDoList(account);
+    sendNewDoneList(account);
+
     updateCounter(newToDoList);
 };
+
 const deleteTask = function (account, task) {
     const newDoList = account.do.filter((item) => item != task);
     const newDoneList = account.done.filter((item) => item != task);
     account.do = newDoList;
     account.done = newDoneList;
+
+    sendNewDoList(account);
+    sendNewDoneList(account);
     updateCounter(newDoList);
 };
 
@@ -289,7 +308,7 @@ loginSignupBtns.forEach((btn) => {
                     );
                 }
             }
-            console.log(currentAccount);
+
             setLocalStorage("userId", currentAccount.id);
             inputName.value = inputPassword.value = "";
             closeModal(loginOverlay);
