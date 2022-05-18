@@ -164,15 +164,24 @@ const displayList = function (todoList, doneList) {
     taskElementListener();
 };
 
-// manipulating list items
-const addNewTask = function (account, task) {
-    const doList = account.do;
-    inputField.value = "";
-    doList.push(task);
-    currentAccount.do = doList;
-    console.log(currentAccount);
-    updateUI(account);
+const sendNewDoList = async function (account) {
+    fetch(
+        `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users/${account.id}/.json`,
+        {
+            method: "PATCH",
+            body: JSON.stringify({ do: account.do.join(";") }),
+        }
+    );
 };
+
+// manipulating list items
+const addNewTask = async function (account, task) {
+    account.do.push(task);
+    inputField.value = "";
+    updateUI(account);
+    sendNewDoList(account);
+};
+
 const crossOutTask = function (account, task) {
     const newToDoList = account.do.filter((item) => item != task);
     account.do = newToDoList;
@@ -309,8 +318,6 @@ inputField.addEventListener("keydown", function (e) {
     const newListItem = inputField.value.trim();
 
     if (e.key === "Enter" && newListItem && currentAccount) {
-        addNewTask(currentAccount, newListItem);
-    } else if (e.key === "Enter" && newItem && currentAccount.id == "u0") {
         addNewTask(currentAccount, newListItem);
     } else if (e.key === "Enter" && !inputField.value) {
         errorPopup("Input should not be empty..");
