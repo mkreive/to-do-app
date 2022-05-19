@@ -169,13 +169,18 @@ const displayList = function (todoList, doneList) {
     listBlockEl.innerHTML = "";
     listItemCounterEl.textContent = "";
 
-    const todo = todoList;
-    const done = doneList;
+    const todo = todoList.filter((el) => el != "");
+    const done = doneList.filter((el) => el != "");
+
+    console.log(todo);
+    console.log(done);
 
     if (todo) {
         todo.forEach((work) => {
-            const html = generateItemHtml(work, "", "");
-            listBlockEl.insertAdjacentHTML("beforeend", html);
+            if (work) {
+                const html = generateItemHtml(work, "", "");
+                listBlockEl.insertAdjacentHTML("beforeend", html);
+            }
         });
         updateCounter(todo);
     }
@@ -187,7 +192,6 @@ const displayList = function (todoList, doneList) {
             }
         });
     }
-
     taskElementListener();
 };
 
@@ -333,7 +337,6 @@ loginSignupBtns.forEach((btn) => {
                         pswrdInputValue
                     );
                     currentAccount = userData;
-                    console.log(currentAccount);
                 }
             }
 
@@ -449,7 +452,6 @@ const appLoad = function () {
             }
         }
 
-        // loaderi yterpti!
         updatePage(currentAccount);
     });
 };
