@@ -85,6 +85,7 @@ const removeLocalStorage = function (key, value) {
 
 // creating new account
 const createAccount = async function (name, password) {
+    // send and create new account in server
     const newAccount = await fetch(
         `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users/.json`,
         {
@@ -101,10 +102,12 @@ const createAccount = async function (name, password) {
     if (!newAccount.ok) {
         throw new Error("Failed to create account");
     }
+    // get newly created id
     const response = await newAccount.json();
     const newId = response.name;
 
-    fetch(
+    // send new id to server
+    const sendNewId = await fetch(
         `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users/${newId}/.json`,
         {
             method: "PATCH",
@@ -112,13 +115,10 @@ const createAccount = async function (name, password) {
         }
     );
 
+    // fetch user data with new id
     const fetchAddress = `https://to-do-list-app-10ca0-default-rtdb.europe-west1.firebasedatabase.app/users.json?orderBy=%22id%22&equalTo=%22${newId}%22`;
     const userData = await fetchUserData(fetchAddress);
-    currentAccount = userData;
-
-    console.log(userData);
-
-    return currentAccount;
+    return userData;
 };
 
 const logoutCurrentAcc = function (account) {
@@ -215,7 +215,8 @@ const addNewTask = async function (account, task) {
     account.do.push(task);
     inputField.value = "";
     updateUI(account);
-    sendNewDoList(account);
+
+    await sendNewDoList(account);
 };
 
 const crossOutTask = function (account, task) {
@@ -327,10 +328,12 @@ loginSignupBtns.forEach((btn) => {
                     );
                     return;
                 } else {
-                    currentAccount = createAccount(
+                    const userData = await createAccount(
                         nameInputValue,
                         pswrdInputValue
                     );
+                    currentAccount = userData;
+                    console.log(currentAccount);
                 }
             }
 
