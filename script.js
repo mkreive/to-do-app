@@ -192,6 +192,7 @@ const displayList = function (todoList, doneList) {
             }
         });
     }
+
     taskElementListener();
 };
 
